@@ -33,7 +33,7 @@ export default function RootLayout({ children }) {
 
         {/* Footer */}
         <footer className="relative z-10 border-t border-[#dfcbaf] bg-[#ebdcc9]">
-          {/* <Footer /> */}
+          <Footer />
         </footer>
       </body>
     </html>
