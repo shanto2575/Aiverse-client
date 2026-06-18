@@ -14,6 +14,10 @@ export default function Navbar() {
   const user=session?.user;
   // console.log(user)
 
+  if (pathname.includes('dashboard')) {
+    return null;
+  }
+
 
 
   const isActive = (path) => pathname === path;
@@ -52,7 +56,7 @@ export default function Navbar() {
           {user ? (
             <div className="flex items-center gap-3 sm:gap-4 border-l border-[#dfcbaf] pl-4 sm:pl-6">
               <Link 
-                href="/dashboard"
+                href={`/dashboard/${user?.role}`}
                 className="flex items-center gap-2 bg-transparent hover:bg-[#2c221e]/5 text-[#2c221e] border border-[#2c221e]/20 px-4 py-1.5 rounded-xl text-sm font-bold transition-all duration-200"
               >
                 <LayoutDashboard className="w-4 h-4" />
