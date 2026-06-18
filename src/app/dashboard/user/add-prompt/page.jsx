@@ -3,37 +3,43 @@
 import React, { useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@heroui/react";
+import { imageUpload } from "@/lib/imageUpload";
+import { addPrompt } from "@/lib/api/user/action";
+import { authClient } from '@/lib/auth-client';
+import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
-// Mock helper placeholders - adjust to your project settings
-const imageUpload = async (file) => {
-  return { url: "https://placeholder-url.com/image.jpg" };
-};
-const AddProducts = async (products) => {
-  console.log("Full Prompt Asset Published: ", products);
-};
 
 export default function AddProductPage() {
+  const route = useRouter()
   const [visibility, setVisibility] = useState("public");
+
+  const { data: session } = authClient.useSession()
+  // console.log(session)
 
   const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const data = Object.fromEntries(formData.entries());
-    const file = formData.get("image");
-    
-    let imageUrl = "";
-    if (file && file.size > 0) {
-      const image = await imageUpload(file);
-      imageUrl = image.url;
-    }
-    
+    const image = await imageUpload(data?.image)
+    // console.log(image.url)
+
+
     const products = {
       ...data,
-      visibility,
-      image: imageUrl
+      image: image.url,
+      userEmail: session?.user?.email,
+      status: 'pendding',
+      copies: 0,
+      rating: 0
     };
-    
-    await AddProducts(products);
+    const result = await addPrompt(products)
+    // console.log(result)
+    if (result.insertedId) {
+      route.push('/dashboard/user/my-prompts')
+      toast.success('Prompts Add Successful')
+
+    }
   };
 
   // Shared dynamic tailwind class architecture for strict input fields
@@ -41,7 +47,7 @@ export default function AddProductPage() {
 
   return (
     <div className="w-full max-w-4xl mx-auto px-4  text-[#2c221e]">
-      
+
       {/* Structural Context Header */}
       <div className="relative flex items-center justify-between pb-1 mb-6 border-b border-[#dfcbaf]">
         <div>
@@ -56,17 +62,17 @@ export default function AddProductPage() {
 
       <div className="bg-[#ebdcc9]/30 border border-[#dfcbaf] rounded-3xl p-2 md:p-5 shadow-sm backdrop-blur-sm">
         <form onSubmit={onSubmit} className="flex flex-col gap-5">
-          
+
           {/* PROMPT TITLE */}
           <div>
             <label className="text-xs font-bold uppercase tracking-widest text-[#2c221e]/80 mb-1.5 block">
               Prompt Title *
             </label>
-            <input 
+            <input
               required
               name="title"
               type="text"
-              placeholder="e.g. Optimized React Tailwind Card Builder" 
+              placeholder="e.g. Optimized React Tailwind Card Builder"
               className="w-full bg-[#ebdcc9]/20 border border-[#dfcbaf] hover:border-[#2c221e]/40 focus:border-[#2c221e] focus:outline-none rounded-xl text-sm font-medium text-[#2c221e] transition-all duration-200 px-4 py-3"
             />
           </div>
@@ -76,11 +82,11 @@ export default function AddProductPage() {
             <label className="text-xs font-bold uppercase tracking-widest text-[#2c221e]/80 mb-1.5 block">
               Short Description *
             </label>
-            <input 
+            <input
               required
               name="shortDescription"
               type="text"
-              placeholder="Explain what this prompt accomplishes in 1-2 sentences" 
+              placeholder="Explain what this prompt accomplishes in 1-2 sentences"
               className="w-full bg-[#ebdcc9]/20 border border-[#dfcbaf] hover:border-[#2c221e]/40 focus:border-[#2c221e] focus:outline-none rounded-xl text-sm font-medium text-[#2c221e] transition-all duration-200 px-4 py-3"
             />
           </div>
@@ -90,10 +96,10 @@ export default function AddProductPage() {
             <label className="text-xs font-bold uppercase tracking-widest text-[#2c221e]/80 mb-1.5 block">
               Prompt Content Template *
             </label>
-            <textarea 
+            <textarea
               required
               name="description"
-              placeholder="Write the full, detailed prompt instructions. Use brackets to indicate variables e.g., 'Act as a [role]...'" 
+              placeholder="Write the full, detailed prompt instructions. Use brackets to indicate variables e.g., 'Act as a [role]...'"
               className="w-full bg-[#ebdcc9]/20 border border-[#dfcbaf] hover:border-[#2c221e]/40 focus:border-[#2c221e] focus:outline-none rounded-xl text-sm font-medium text-[#2c221e] transition-all duration-200 min-h-[110px] p-4 resize-y"
             />
           </div>
@@ -160,11 +166,11 @@ export default function AddProductPage() {
               </label>
               <div className="flex flex-wrap items-center gap-6 pt-1">
                 <label className="flex items-center gap-2 text-sm font-medium cursor-pointer select-none">
-                  <input 
-                    type="radio" 
-                    name="visibility" 
-                    value="public" 
-                    checked={visibility === "public"} 
+                  <input
+                    type="radio"
+                    name="visibility"
+                    value="public"
+                    checked={visibility === "public"}
                     onChange={() => setVisibility("public")}
                     className="accent-[#2c221e] h-4 w-4"
                   />
@@ -172,11 +178,11 @@ export default function AddProductPage() {
                 </label>
 
                 <label className="flex items-center gap-2 text-sm font-medium cursor-pointer select-none">
-                  <input 
-                    type="radio" 
-                    name="visibility" 
-                    value="private" 
-                    checked={visibility === "private"} 
+                  <input
+                    type="radio"
+                    name="visibility"
+                    value="private"
+                    checked={visibility === "private"}
                     onChange={() => setVisibility("private")}
                     className="accent-[#2c221e] h-4 w-4"
                   />
@@ -191,10 +197,10 @@ export default function AddProductPage() {
             <label className="text-xs font-bold uppercase tracking-widest text-[#2c221e]/80 mb-1.5 block">
               Tags (Comma-Separated)
             </label>
-            <input 
+            <input
               name="tags"
               type="text"
-              placeholder="e.g. tailwind, card, component, responsive" 
+              placeholder="e.g. tailwind, card, component, responsive"
               className="w-full bg-[#ebdcc9]/20 border border-[#dfcbaf] hover:border-[#2c221e]/40 focus:border-[#2c221e] focus:outline-none rounded-xl text-sm font-medium text-[#2c221e] transition-all duration-200 px-4 py-3"
             />
           </div>
@@ -205,20 +211,20 @@ export default function AddProductPage() {
               Thumbnail Image Upload
             </label>
             <div className="relative w-full flex items-center bg-[#ebdcc9]/20 border border-[#dfcbaf] hover:border-[#2c221e]/40 rounded-xl transition-all duration-200 p-1.5">
-              <input 
+              <input
                 required
-                name="image" 
-                type="file" 
+                name="image"
+                type="file"
                 accept="image/*"
-                className="w-full text-xs font-bold text-[#2c221e]/70 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:tracking-widest file:bg-[#2c221e] file:text-[#ebdcc9] file:hover:bg-[#4a3b35] file:transition-colors file:cursor-pointer cursor-pointer" 
+                className="w-full text-xs font-bold text-[#2c221e]/70 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-black file:uppercase file:tracking-widest file:bg-[#2c221e] file:text-[#ebdcc9] file:hover:bg-[#4a3b35] file:transition-colors file:cursor-pointer cursor-pointer"
               />
             </div>
           </div>
 
           {/* Actions Submission Panel */}
           <div className="flex items-center justify-end gap-3 pt-4 border-t border-[#dfcbaf]/50 mt-2">
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               className="w-full bg-[#2c221e] text-[#ebdcc9] hover:bg-[#4a3b35] font-bold uppercase tracking-widest h-12 rounded-xl shadow-md transition-all duration-300 flex items-center justify-center gap-1.5 group text-xs cursor-pointer"
             >
               Submit Prompt for Review

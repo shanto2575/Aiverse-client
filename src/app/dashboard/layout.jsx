@@ -1,5 +1,6 @@
 import DashboardSideBar from '@/components/dashboard/DashboardSideBar'
 import React from 'react'
+import { Toaster } from 'react-hot-toast'
 
 const DashboardLayout = ({ children }) => {
 
@@ -13,6 +14,7 @@ const DashboardLayout = ({ children }) => {
                     {children}
                 </main>
             </div>
+            <Toaster />
         </div>
     )
 }

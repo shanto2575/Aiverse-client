@@ -77,7 +77,7 @@ export default function DashboardSideBar() {
                     <div className="p-2 space-y-3">
                         <Link href="/">
                             <h2 className="font-black text-2xl uppercase tracking-wider bg-gradient-to-r from-[#2c221e] via-[#4a3b35] to-[#2c221e] bg-clip-text text-transparent">
-                                Alverse
+                                AIverse
                             </h2>
                         </Link>
 
@@ -85,7 +85,7 @@ export default function DashboardSideBar() {
                         <div className="text-xs font-medium text-[#2c221e]/60 space-y-1 bg-[#ebdcc9]/50 border border-[#dfcbaf]/40 p-3 rounded-xl shadow-sm">
                             <p className="truncate font-semibold text-[#2c221e]">{user?.email || "anonymous@alverse.com"}</p>
                             <span className="uppercase tracking-widest text-[9px] bg-[#2c221e] text-[#ebdcc9] px-2 py-0.5 rounded-md inline-block font-bold">
-                                {role === "creator" ? "creator" : role} panel
+                                {role}
                             </span>
                         </div>
                     </div>
