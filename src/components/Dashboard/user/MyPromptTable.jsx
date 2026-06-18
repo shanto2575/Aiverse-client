@@ -2,6 +2,7 @@ import React from 'react'
 import { Table } from "@heroui/react";
 import { Eye, Pencil, Trash2, Lock, Globe } from 'lucide-react';
 import MyPromptsEditsButton from './MyPromptsEditsButton';
+import { MyPromptsDeleteButton } from './MyPromptsDeleteButton';
 
 const MyPromptTable = ({ prompts = [] }) => {
     const safePrompts = Array.isArray(prompts) ? prompts : [];
@@ -89,9 +90,7 @@ const MyPromptTable = ({ prompts = [] }) => {
                                             <MyPromptsEditsButton item={item} />
 
                                             {/* Delete Button */}
-                                            <button className="p-2 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-xl border border-rose-200 transition-all duration-200 active:scale-95" title="Delete">
-                                                <Trash2 size={13} />
-                                            </button>
+                                            <MyPromptsDeleteButton  item={item}/>
                                         </div>
                                     </Table.Cell>
                                 </Table.Row>
