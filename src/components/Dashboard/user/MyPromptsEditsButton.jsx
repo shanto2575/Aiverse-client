@@ -8,8 +8,6 @@ import { EditsPrompt } from "@/lib/api/user/action";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 
-
-
 const MyPromptsEditsButton = ({ item }) => {
     const [visibility, setVisibility] = useState("public");
     // console.log(item)
