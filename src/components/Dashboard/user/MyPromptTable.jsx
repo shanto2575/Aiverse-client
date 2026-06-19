@@ -3,9 +3,11 @@ import { Table } from "@heroui/react";
 import { Eye, Pencil, Trash2, Lock, Globe } from 'lucide-react';
 import MyPromptsEditsButton from './MyPromptsEditsButton';
 import { MyPromptsDeleteButton } from './MyPromptsDeleteButton';
+import Link from 'next/link';
 
 const MyPromptTable = ({ prompts = [] }) => {
     const safePrompts = Array.isArray(prompts) ? prompts : [];
+    // console.log(safePrompts)
 
     return (
         <div className="w-full rounded-2xl border border-[#dfcbaf] bg-[#ebdcc9] p-2 shadow-xl shadow-[#2c221e]/5 transition-all duration-300">

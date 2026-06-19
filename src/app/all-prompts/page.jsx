@@ -8,8 +8,8 @@ const AllPromptsPage = async () => {
     // console.log(promptData)
 
     return (
-        <div className="min-h-screen bg-[#ebdcc9] text-[#2c221e] antialiased">
-            <div className="py-16 px-6 max-w-7xl mx-auto w-full space-y-12">
+        <div className="min-h-screen bg-[#ebdcc9] text-[#2c221e] antialiased mb-10">
+            <div className="py-16 px-6 max-w-7xl mx-auto w-full space-y-12 ">
 
                 {/* HEADER */}
                 <div className="text-center md:text-left space-y-3 border-b border-[#dfcbaf] pb-8">
@@ -39,7 +39,6 @@ const AllPromptsPage = async () => {
                         <p className="text-[#2c221e]/50 font-bold">No premium prompts found at this moment.</p>
                     </div>
                 )}
-
             </div>
         </div>
     )
