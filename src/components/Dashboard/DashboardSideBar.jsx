@@ -26,7 +26,6 @@ export default function DashboardSideBar() {
     const { data: session } = authClient.useSession();
     const user = session?.user;
 
-    // Defaulting to 'user' if role is not defined
     const role = user?.role || "user";
 
     // Strict Routing Matrix as per defined requirements

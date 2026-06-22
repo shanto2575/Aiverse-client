@@ -19,7 +19,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="h-full scroll-smooth antialiased">
-      <body 
+      <body
         className={`${inter.className} min-h-screen flex flex-col bg-[#ebdcc9] text-[#2c221e] selection:bg-[#2c221e] selection:text-[#ebdcc9] relative overflow-x-hidden`}
       >
         {/* Header - Fixed or Sticky according to modern UI */}
@@ -36,7 +36,7 @@ export default function RootLayout({ children }) {
         <footer className="relative z-10 border-t border-[#dfcbaf] bg-[#ebdcc9]">
           <Footer />
         </footer>
-         <Toaster />
+        <Toaster />
       </body>
     </html>
   );

@@ -3,7 +3,7 @@ import { stripe } from '@/lib/stripe'
 import { redirect } from 'next/navigation'
 import { CheckCircle2, Sparkles, ArrowRight, ShieldCheck, Crown } from "lucide-react";
 import Link from 'next/link';
-import { baseUrl } from '@/lib/baseUrl';
+import { subscription } from '@/lib/api/user/action';
 
 
 export default async function PremiumSuccess({ searchParams }) {
@@ -16,17 +16,11 @@ export default async function PremiumSuccess({ searchParams }) {
     const session = await stripe.checkout.sessions.retrieve(session_id, {
         expand: ['line_items', 'payment_intent']
     })
-    // console.log(session)
+    // console.log(session.metadata)
+    const metadata = session?.metadata;
+    // console.log(metadata,'meta')
 
-    await fetch(`${baseUrl}/api/user/upgrade-primium/${session?.customer_email}`,
-        {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            cache: "no-store"
-        }
-    )
+    await subscription({ ...metadata, sessionId: session_id })
 
 
     return (

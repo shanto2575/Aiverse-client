@@ -3,18 +3,17 @@
 import React from "react";
 import { Mail, ShieldCheck, FileText, CheckCircle2, Diamond, Sparkles, Crown } from "lucide-react";
 import { getUser } from "@/lib/session";
-import UpdateToPremiumButton from "@/components/Dashboard/user/UpdateToPremiumButton";
 
 
 export default async function UserProfilePage() {
     // const { data: session } = authClient.useSession();
-    const user=await getUser()
+    const user = await getUser()
     const role = user?.role || "user";
     // console.log(user)
 
-    const plan = user?.plan; 
+    const plan = user?.plan;
     // console.log(plan)
-    
+
     return (
         <div className="w-full max-w-4xl mx-auto px-4 py-8 text-[#2c221e]">
 
@@ -52,11 +51,10 @@ export default async function UserProfilePage() {
                             <span className="text-[10px] font-bold uppercase tracking-widest bg-[#2c221e] text-[#ebdcc9] px-2.5 py-1 rounded-md shadow-sm">
                                 Role: {role}
                             </span>
-                            <span className={`text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm transition-all ${
-                                plan 
-                                ? "bg-gradient-to-r from-amber-500 to-yellow-600 text-white shadow-[0_0_10px_rgba(245,158,11,0.3)] animate-pulse" 
-                                : "border border-[#dfcbaf] bg-[#ebdcc9]/50 text-[#2c221e]"
-                            }`}>
+                            <span className={`text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm transition-all ${plan
+                                    ? "bg-gradient-to-r from-amber-500 to-yellow-600 text-white shadow-[0_0_10px_rgba(245,158,11,0.3)] animate-pulse"
+                                    : "border border-[#dfcbaf] bg-[#ebdcc9]/50 text-[#2c221e]"
+                                }`}>
                                 Plan: {user?.plan}
                             </span>
                         </div>
@@ -99,14 +97,22 @@ export default async function UserProfilePage() {
                                 Unlock access to all private prompt templates, parameter sets, and community reviews for a single one-time contribution of $5.
                             </p>
                         </div>
-                        <UpdateToPremiumButton />
-                        
+                        {/* <UpdateToPremiumButton /> */}
+                        <form action={'/api/checkout_sessions'} method='POST'>
+                            <button
+                            type="submit"
+                            // onClick={updateToPrimium}
+                            className="w-full md:w-auto bg-[#ebdcc9] text-[#2c221e] hover:bg-white font-black px-6 py-3 rounded-xl text-sm transition-all shadow-md transform active:scale-[0.98] shrink-0 relative z-10 tracking-wide cursor-pointer">
+                            Upgrade Now ($5)
+                        </button>
+                        </form>
+
                     </div>
                 ) : (
                     <div className="relative overflow-hidden rounded-2xl p-0.5 bg-gradient-to-r from-amber-400 via-purple-500 to-yellow-500 shadow-[0_10px_30px_rgba(139,92,246,0.15)] group">
-                        
+
                         <div className="bg-gradient-to-br from-[#1e1512] via-[#241324] to-[#140b24] text-white rounded-[14px] p-6 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
-                            
+
                             <div className="absolute top-0 right-0 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-purple-500/20 transition-all duration-700" />
                             <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-amber-500/5 rounded-full blur-2xl pointer-events-none" />
 
