@@ -5,7 +5,7 @@ export const userPrompts=async(email)=>{
     return res;
 }
 
-export const allPrompts=async()=>{
-    const res=await serverFetch('/api/prompts')
+export const allPrompts=async(query)=>{
+    const res=await serverFetch(`/api/prompts?${query}`)
     return res;
 }

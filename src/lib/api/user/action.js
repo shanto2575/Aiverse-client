@@ -12,6 +12,8 @@ export const EditsPrompt=async(data,id)=>{
     return res;
 }
 
+
+
 export const subscription=async(data)=>{
     const res=await fetch(`${baseUrl}/subscriptions`,{
         method:'POST',

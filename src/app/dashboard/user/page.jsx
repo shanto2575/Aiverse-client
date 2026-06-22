@@ -3,16 +3,25 @@
 import React from "react";
 import { Mail, ShieldCheck, FileText, CheckCircle2, Diamond, Sparkles, Crown } from "lucide-react";
 import { getUser } from "@/lib/session";
+import { baseUrl } from "@/lib/baseUrl";
 
 
 export default async function UserProfilePage() {
     // const { data: session } = authClient.useSession();
     const user = await getUser()
+    console.log(user)
     const role = user?.role || "user";
     // console.log(user)
 
     const plan = user?.plan;
     // console.log(plan)
+    const res = await fetch(
+        `${baseUrl}/api/user/${user?.email}`,
+        { cache: "no-store" }
+    );
+    const data = await res.json();
+
+    // console.log(data);
 
     return (
         <div className="w-full max-w-4xl mx-auto px-4 py-8 text-[#2c221e]">
@@ -52,8 +61,8 @@ export default async function UserProfilePage() {
                                 Role: {role}
                             </span>
                             <span className={`text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm transition-all ${plan
-                                    ? "bg-gradient-to-r from-amber-500 to-yellow-600 text-white shadow-[0_0_10px_rgba(245,158,11,0.3)] animate-pulse"
-                                    : "border border-[#dfcbaf] bg-[#ebdcc9]/50 text-[#2c221e]"
+                                ? "bg-gradient-to-r from-amber-500 to-yellow-600 text-white shadow-[0_0_10px_rgba(245,158,11,0.3)] animate-pulse"
+                                : "border border-[#dfcbaf] bg-[#ebdcc9]/50 text-[#2c221e]"
                                 }`}>
                                 Plan: {user?.plan}
                             </span>
@@ -68,7 +77,7 @@ export default async function UserProfilePage() {
                             <FileText className="w-4 h-4" />
                             <span>Prompts Published</span>
                         </div>
-                        <p className="text-4xl font-black text-[#2c221e]">0</p>
+                        <p className="text-4xl font-black text-[#2c221e]">{data?.promptCount}</p>
                     </div>
 
                     <div className="bg-[#ebdcc9]/40 border border-[#dfcbaf]/60 rounded-2xl p-5 space-y-3 shadow-sm">
@@ -100,11 +109,11 @@ export default async function UserProfilePage() {
                         {/* <UpdateToPremiumButton /> */}
                         <form action={'/api/checkout_sessions'} method='POST'>
                             <button
-                            type="submit"
-                            // onClick={updateToPrimium}
-                            className="w-full md:w-auto bg-[#ebdcc9] text-[#2c221e] hover:bg-white font-black px-6 py-3 rounded-xl text-sm transition-all shadow-md transform active:scale-[0.98] shrink-0 relative z-10 tracking-wide cursor-pointer">
-                            Upgrade Now ($5)
-                        </button>
+                                type="submit"
+                                // onClick={updateToPrimium}
+                                className="w-full md:w-auto bg-[#ebdcc9] text-[#2c221e] hover:bg-white font-black px-6 py-3 rounded-xl text-sm transition-all shadow-md transform active:scale-[0.98] shrink-0 relative z-10 tracking-wide cursor-pointer">
+                                Upgrade Now ($5)
+                            </button>
                         </form>
 
                     </div>

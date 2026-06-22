@@ -36,7 +36,7 @@ export default function DashboardSideBar() {
     }, []);
 
     if (!mounted) return null;
-    if (isPending) return <div className="p-4 text-sm">Loading...</div>;
+    if (isPending) return <div className="p-4 text-sm"></div>;
     const user = session?.user;
     const role = user?.role || "user";
 
