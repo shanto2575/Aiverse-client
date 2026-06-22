@@ -43,7 +43,7 @@ export default async function UserProfilePage() {
 
                         <div className="flex items-center justify-center sm:justify-start gap-1.5 text-sm font-medium text-[#2c221e]/80">
                             <Mail className="w-4 h-4 opacity-70" />
-                            <span>{user?.email || "anonymous@alverse.com"}</span>
+                            <span>{user?.email}</span>
                         </div>
 
                         {/* Badges Row */}

@@ -1,11 +1,9 @@
 'use server'
 
-import { authClient } from "@/lib/auth-client";
 import { baseUrl } from "@/lib/baseUrl";
 import { serverMutation } from "@/lib/server"
 
 export const addPrompt=async(product)=>{
-    
     const res=await serverMutation('/api/prompts','POST',product)
     return res;
 }

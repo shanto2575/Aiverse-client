@@ -22,12 +22,10 @@ export default function RootLayout({ children }) {
       <body
         className={`${inter.className} min-h-screen flex flex-col bg-[#ebdcc9] text-[#2c221e] selection:bg-[#2c221e] selection:text-[#ebdcc9] relative overflow-x-hidden`}
       >
-        {/* Header - Fixed or Sticky according to modern UI */}
         <header className="sticky top-0 z-50 border-b border-[#dfcbaf] bg-[#ebdcc9]/90 backdrop-blur-md">
           <Navbar />
         </header>
 
-        {/* Dynamic Main Content with Layout Constraints */}
         <main className="flex-1 w-full relative z-10">
           {children}
         </main>

@@ -1,6 +1,7 @@
-import { NextResponse } from "next/server";
-import { auth } from "./lib/auth";
-import { cookies, headers } from "next/headers";
+import { auth } from '@/lib/auth'
+import { headers } from 'next/headers'
+import { NextResponse } from 'next/server'
+
 
 export async function proxy(request) {
     const session = await auth.api.getSession({
@@ -10,9 +11,8 @@ export async function proxy(request) {
     if (!session) {
         return NextResponse.redirect(new URL('/signin', request.url))
     }
-
 }
 
 export const config = {
-    matcher: ['/all-prompts']
+    matcher: '/about/:path*',
 }

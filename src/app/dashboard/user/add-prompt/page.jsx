@@ -19,26 +19,29 @@ export default function AddProductPage() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.target);
+    const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData.entries());
+
     const image = await imageUpload(data?.image)
     // console.log(image.url)
+    // console.log(data)
 
 
     const products = {
       ...data,
       image: image.url,
       userEmail: session?.user?.email,
-      status: 'pendding',
+      status: 'pending',
       copies: 0,
       rating: 0
     };
     const result = await addPrompt(products)
-    // console.log(result)
+    // console.log(result,'limit')
     if (result.insertedId) {
       route.push('/dashboard/user/my-prompts')
       toast.success('Prompts Add Successful')
-
+    }else{
+      toast.error(result.message ||'Prompts is not created!')
     }
   };
 

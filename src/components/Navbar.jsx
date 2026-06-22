@@ -19,7 +19,6 @@ export default function Navbar() {
   }
 
 
-
   const isActive = (path) => pathname === path;
   const handleLogout=async()=>{
     await authClient.signOut();
