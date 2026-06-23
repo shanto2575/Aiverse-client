@@ -4,6 +4,7 @@ import React from "react";
 import { Mail, ShieldCheck, FileText, CheckCircle2, Diamond, Sparkles, Crown } from "lucide-react";
 import { getUser } from "@/lib/session";
 import { baseUrl } from "@/lib/baseUrl";
+import Image from "next/image";
 
 
 export default async function UserProfilePage() {
@@ -24,7 +25,7 @@ export default async function UserProfilePage() {
     // console.log(data);
 
     return (
-        <div className="w-full max-w-4xl mx-auto px-4 py-8 text-[#2c221e]">
+        <div className="w-full max-w-7xl mx-auto px-4 py-8 text-[#2c221e]">
 
             <div className="mb-8">
                 <h1 className="text-3xl font-black tracking-tight">User Account Profile</h1>
@@ -39,7 +40,12 @@ export default async function UserProfilePage() {
                 <div className="flex flex-col sm:flex-row items-center gap-5 pb-6 border-b border-[#dfcbaf]/50">
                     <div className="w-20 h-20 rounded-full bg-[#2c221e] flex items-center justify-center text-[#ebdcc9] font-black text-2xl border-2 border-[#dfcbaf] shadow-[0_0_15px_rgba(44,34,30,0.15)] overflow-hidden shrink-0">
                         {user?.image ? (
-                            <img src={user.image} alt={user?.name} className="w-full h-full object-cover" />
+                            <Image
+                                src={user.image}
+                                alt={user?.name}
+                                width={300}
+                                height={300}
+                                className="w-full h-full object-cover" />
                         ) : (
                             <span>{user?.name?.charAt(0).toUpperCase() || "A"}</span>
                         )}
@@ -77,7 +83,7 @@ export default async function UserProfilePage() {
                             <FileText className="w-4 h-4" />
                             <span>Prompts Published</span>
                         </div>
-                        <p className="text-4xl font-black text-[#2c221e]">{data?.promptCount}</p>
+                        <p className="text-4xl font-black text-[#2c221e]">{data?.promptCount||0}</p>
                     </div>
 
                     <div className="bg-[#ebdcc9]/40 border border-[#dfcbaf]/60 rounded-2xl p-5 space-y-3 shadow-sm">

@@ -26,12 +26,12 @@ export default function RootLayout({ children }) {
           <Navbar />
         </header>
 
-        <main className="flex-1 w-full relative z-10">
+        <main className="flex-1 w-full ">
           {children}
         </main>
 
         {/* Footer */}
-        <footer className="relative z-10 border-t border-[#dfcbaf] bg-[#ebdcc9]">
+        <footer className=" border-t border-[#dfcbaf] bg-[#ebdcc9]">
           <Footer />
         </footer>
         <Toaster />

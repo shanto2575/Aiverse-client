@@ -4,6 +4,10 @@ export const userPrompts=async(email)=>{
     const res=await serverFetch(`/api/prompts/${email}`)
     return res;
 }
+export const Bookmarks=async(email)=>{
+    const res=await serverFetch(`/api/bookmarks/${email}`)
+    return res;
+}
 
 export const allPrompts=async(query)=>{
     const res=await serverFetch(`/api/prompts?${query}`)

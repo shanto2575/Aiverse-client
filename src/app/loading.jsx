@@ -4,7 +4,7 @@ import React from "react";
 
 export default function LoadingPage() {
     return (
-        <div className="!fixed !top-0 !left-0 w-[100vw] h-[100vh] z-[999999] flex flex-col items-center justify-center bg-[#ebdcc9] text-[#2c221e] overflow-hidden m-0 p-0">
+        <div className="fixed inset-0 z-[9999999] flex flex-col items-center justify-center bg-[#ebdcc9] text-[#2c221e] overflow-hidden">
 
             <div className="absolute top-[-20%] left-[-10%] w-[500px] h-[500px] rounded-full bg-[#4a3b35]/5 blur-[120px] pointer-events-none" />
             <div className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full bg-[#2c221e]/5 blur-[120px] pointer-events-none" />
