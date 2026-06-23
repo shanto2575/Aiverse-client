@@ -26,6 +26,7 @@ const PromptsDetailsPage = async ({ params }) => {
 
     const prompt = await fetchPrompt(id);
     const user = await getUser();
+    // console.log(prompt)
 
     if (!prompt) {
         return (
@@ -261,6 +262,8 @@ const PromptsDetailsPage = async ({ params }) => {
                 userEmail={user?.email}
                 visibility={visibility}
                 userPlan={userPlan}
+                promptTitle={prompt.title}
+                promptaiEngine={prompt.aiEngine}
             />
         </div>
     );

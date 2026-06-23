@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Star, Send, User, MessageSquare, Lock } from "lucide-react"; // 🔥 Lock আইকন যুক্ত করা হয়েছে
+import { Star, Send, User, MessageSquare, Lock } from "lucide-react"; 
 import { baseUrl } from "@/lib/baseUrl";
 import toast from "react-hot-toast";
 
-export default function CommunityReviews({ promptId, userEmail, userPlan, visibility }) {
+export default function CommunityReviews({ promptId, userEmail, userPlan, visibility,promptaiEngine,promptTitle }) {
     const [reviews, setReviews] = useState([]);
     const [rating, setRating] = useState(5);
     const [comment, setComment] = useState("");
@@ -49,7 +49,7 @@ export default function CommunityReviews({ promptId, userEmail, userPlan, visibi
             const res = await fetch(`${baseUrl}/api/reviews`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ promptId, userEmail, rating, comment }),
+                body: JSON.stringify({ promptId, userEmail, rating, comment,promptTitle,promptaiEngine }),
             });
 
             if (!res.ok) {
