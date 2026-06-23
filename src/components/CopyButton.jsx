@@ -1,37 +1,35 @@
 "use client";
 
-import { useState } from "react";
-import { Copy, Check } from "lucide-react";
+import { Copy } from "lucide-react";
+import toast from "react-hot-toast";
+import { baseUrl } from "@/lib/baseUrl";
 
-export default function CopyButton({ textToCopy }) {
-    const [copied, setCopied] = useState(false);
-
+export default function CopyButton({ textToCopy, promptId }) {
     const handleCopy = async () => {
         try {
-            await navigator.clipboard.writeText(textToCopy || "");
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
-        } catch (err) {
-            console.error("Failed to copy text: ", err);
+            await navigator.clipboard.writeText(textToCopy);
+
+            const res = await fetch(
+                `${baseUrl}/api/prompts/copy/${promptId}`,
+                {
+                    method: "PATCH",
+                }
+            );
+
+            if (res.ok) {
+                toast.success("Prompt copied!");
+            }
+        } catch (error) {
+            toast.error("Failed to copy!");
         }
     };
 
     return (
-        <button 
+        <button
             onClick={handleCopy}
-            className="flex items-center gap-1.5 bg-[#2c221e] hover:bg-[#4a3b35] text-[#ebdcc9] text-xs font-black uppercase tracking-wider py-1.5 px-3.5 rounded-xl transition-all duration-200 active:scale-95 shadow-sm"
+            className="p-2.5 rounded-xl border border-[#dfcbaf] hover:bg-[#2c221e]/5"
         >
-            {copied ? (
-                <>
-                    <Check className="w-3.5 h-3.5 text-emerald-400" />
-                    <span className="text-emerald-400">Copied</span>
-                </>
-            ) : (
-                <>
-                    <Copy className="w-3.5 h-3.5" />
-                    <span>Copy</span>
-                </>
-            )}
+            <Copy className="w-4 h-4" />
         </button>
     );
 }

@@ -4,7 +4,6 @@ import { useRouter } from "next/navigation";
 import { baseUrl } from "@/lib/baseUrl";
 import Image from "next/image";
 import { Trash2, Calendar, ArrowUpRight } from "lucide-react";
-import Link from "next/link";
 
 export default function BookmarkCard({ item }) {
     const router = useRouter();

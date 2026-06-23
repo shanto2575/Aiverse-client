@@ -61,7 +61,7 @@ const PromptsCard = ({ cardData, ratingValue }) => {
                             <Copy className="w-3 h-3 opacity-60" /> {cardData.copies || 0}
                         </span>
                         <span className="flex items-center gap-0.5 text-amber-700">
-                            <Star className="w-3 h-3 fill-current" /> {ratingValue.toFixed(2)}
+                            <Star className="w-3 h-3 fill-current" /> <span>{cardData.averageRating.toFixed(1)} ({cardData.totalReviews})</span>
                         </span>
                     </div>
                 </div>

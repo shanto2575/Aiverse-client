@@ -1,170 +1,231 @@
 "use client";
 
-import React, { useState } from 'react';
-import { Star, MessageSquare, Send, CheckCircle2, User } from 'lucide-react';
+import React, { useEffect, useState } from "react";
+import { Star, Send, User, MessageSquare, Lock } from "lucide-react"; // 🔥 Lock আইকন যুক্ত করা হয়েছে
+import { baseUrl } from "@/lib/baseUrl";
+import toast from "react-hot-toast";
 
-export default function CommunityReviews() {
+export default function CommunityReviews({ promptId, userEmail, userPlan, visibility }) {
     const [reviews, setReviews] = useState([]);
     const [rating, setRating] = useState(5);
     const [comment, setComment] = useState("");
-    const [hoverRating, setHoverRating] = useState(0);
-
     const [hasReviewed, setHasReviewed] = useState(false);
 
-    const handleSubmit = (e) => {
+    const [totalReviews, setTotalReviews] = useState(0);
+    const [averageRating, setAverageRating] = useState(0);
+
+    const [loading, setLoading] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
+
+    const fetchReviews = async () => {
+        try {
+            setLoading(true);
+            const res = await fetch(`${baseUrl}/api/reviews/${promptId}`);
+            const data = await res.json();
+
+            setReviews(data.reviews || []);
+            setTotalReviews(data.totalReviews);
+            setAverageRating(data.averageRating);
+
+            const mine = data.reviews.find((r) => r.userEmail === userEmail);
+            if (mine) setHasReviewed(true);
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (promptId) fetchReviews();
+    }, [promptId]);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (!comment.trim()) return;
 
-        const newReview = {
-            id: Date.now(),
-            user: "Prompt Engineer",
-            email: "shanto@diu.edu.bd", 
-            rating: rating,
-            comment: comment,
-            date: new Date().toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric'
-            })
-        };
+        try {
+            setSubmitting(true);
+            const res = await fetch(`${baseUrl}/api/reviews`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ promptId, userEmail, rating, comment }),
+            });
 
-        setReviews([newReview, ...reviews]);
-        setComment("");
-        setHasReviewed(true); 
+            if (!res.ok) {
+                const errText = await res.text();
+                toast.error("Something went wrong!");
+                console.log(errText);
+                return;
+            }
+
+            const data = await res.json();
+            setReviews((prev) => [data.review, ...prev]);
+            setTotalReviews(data.totalReviews);
+            setAverageRating(data.averageRating);
+
+            setHasReviewed(true);
+            setComment("");
+            setRating(5);
+
+            toast.success("Review published! Reloading...", {
+                style: {
+                    border: '1px solid #dfcbaf',
+                    padding: '16px',
+                    color: '#ebdcc9',
+                    background: '#2c221e',
+                    fontWeight: 'bold',
+                },
+                iconTheme: {
+                    primary: '#fbbf24',
+                    secondary: '#2c221e',
+                },
+            });
+
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
+
+        } catch (err) {
+            toast.error("Failed to submit review");
+            console.log(err);
+        } finally {
+            setSubmitting(false);
+        }
     };
 
+    const isPremiumLocked =
+        visibility === "PRIVATE" || visibility === "PREMIUM";
+
+    const canReview =
+        !isPremiumLocked && userPlan === "pro";
+
     return (
-        <div className="max-w-7xl mx-auto space-y-6 text-[#2c221e] pt-6 border-t border-[#dfcbaf]">
+        <div className="max-w-7xl mx-auto space-y-8 p-2 text-[#2c221e]">
 
-            {/* ডাইনামিক হেডার কাউন্টার */}
-            <h2 className="text-xl sm:text-2xl font-black tracking-tight">
-                Community Reviews ({reviews.length})
-            </h2>
+            {/* HEADER SECTION */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b-2 border-[#2c221e]/20 pb-5">
+                <div className="space-y-1">
+                    <h2 className="text-2xl font-black tracking-tight flex items-center gap-2 text-[#2c221e]">
+                        <MessageSquare size={24} className="fill-[#2c221e]/10 text-[#2c221e]" />
+                        <span>Community Reviews ({totalReviews})</span>
+                    </h2>
+                    <p className="text-xs text-[#2c221e]/70 font-semibold tracking-wide uppercase">User feedback loop</p>
+                </div>
 
-            {/* মেইন ২-কলাম গ্রিড লেআউট */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+                <div className="inline-flex items-center gap-2 bg-[#2c221e] text-[#ebdcc9] px-5 py-2.5 rounded-xl shadow-[0_4px_14px_rgba(44,34,30,0.25)] self-start sm:self-auto border border-[#dfcbaf]/30">
+                    <span className="text-base font-black tracking-wider text-amber-400">⭐ {Number(averageRating || 0).toFixed(1)}</span>
+                    <span className="text-[10px] uppercase tracking-widest text-[#ebdcc9]/70 border-l border-[#ebdcc9]/30 pl-2 font-bold">Average</span>
+                </div>
+            </div>
 
-                {/* বামপাশ: সাবমিশন বক্স (১ কলাম) */}
-                <div className="lg:col-span-1 bg-white/50 backdrop-blur-md rounded-3xl p-5 sm:p-6 border border-[#dfcbaf] shadow-sm">
-                    <h3 className="text-base font-black uppercase tracking-wider mb-5">
-                        Submit a Review
-                    </h3>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
 
-                    {!hasReviewed ? (
-                        /* === BEFORE STATE: রিভিউ ফর্ম === */
+                <div className="bg-[#2c221e] border-2 border-[#4a3b35] p-6 rounded-2xl shadow-[0_10px_30px_rgba(44,34,30,0.15)] text-[#ebdcc9] lg:sticky lg:top-24">
+                    {!canReview ? (
+                        <div className="text-center py-8 space-y-4 bg-[#4a3b35]/30 rounded-xl p-4 border border-[#ebdcc9]/10">
+                            <div className="w-12 h-12 bg-amber-400 text-[#2c221e] flex items-center justify-center rounded-xl mx-auto shadow-md">
+                                <Lock size={20} className="animate-pulse" />
+                            </div>
+                            <div className="space-y-1">
+                                <h4 className="text-sm font-black text-[#ebdcc9] uppercase tracking-wider">Premium Feature</h4>
+                                <p className="text-xs text-[#ebdcc9]/60 font-medium">
+                                    Only **Pro Plan** users can leave a review on this ecosystem.
+                                </p>
+                            </div>
+                        </div>
+                    ) : !hasReviewed ? (
                         <form onSubmit={handleSubmit} className="space-y-5">
-                            {/* স্টার সিলেকশন */}
-                            <div className="space-y-1.5">
-                                <label className="text-[10px] font-bold uppercase tracking-widest text-[#2c221e]/60 pl-0.5">
-                                    Rating
-                                </label>
-                                <div className="flex items-center gap-1">
-                                    {[1, 2, 3, 4, 5].map((star) => (
-                                        <button
-                                            key={star}
-                                            type="button"
-                                            onClick={() => setRating(star)}
-                                            onMouseEnter={() => setHoverRating(star)}
-                                            onMouseLeave={() => setHoverRating(0)}
-                                            className="transition-transform active:scale-90"
-                                        >
-                                            <Star
-                                                className={`w-5 h-5 transition-colors duration-150 ${star <= (hoverRating || rating)
-                                                        ? "text-amber-600 fill-amber-600"
-                                                        : "text-[#2c221e]/20"
-                                                    }`}
-                                            />
-                                        </button>
-                                    ))}
-                                </div>
+                            <div className="space-y-1">
+                                <h3 className="text-base font-black uppercase tracking-wider text-[#ebdcc9]">Add Your Voice</h3>
+                                <p className="text-xs text-[#ebdcc9]/60">Share your technical review</p>
                             </div>
 
-                            {/* কমেন্ট বক্স */}
-                            <div className="space-y-1.5">
-                                <label className="text-[10px] font-bold uppercase tracking-widest text-[#2c221e]/60 pl-0.5">
-                                    Comment
-                                </label>
-                                <textarea
-                                    value={comment}
-                                    onChange={(e) => setComment(e.target.value)}
-                                    placeholder="Write your review here. What worked? How did you test it?"
-                                    rows={4}
-                                    required
-                                    className="w-full bg-white/80 border border-[#dfcbaf] focus:border-[#2c221e] rounded-xl p-3.5 text-xs sm:text-sm font-medium outline-none resize-none transition-all placeholder-[#2c221e]/40 text-[#2c221e]"
-                                />
+                            <div className="flex gap-2 bg-[#4a3b35]/40 border border-[#ebdcc9]/10 p-3 rounded-xl justify-center shadow-inner">
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                    <button
+                                        type="button"
+                                        key={star}
+                                        onClick={() => setRating(star)}
+                                        className="transition-all duration-150 hover:scale-120 active:scale-95 p-1 cursor-pointer"
+                                    >
+                                        <Star
+                                            className={`w-6 h-6 transition-all ${star <= rating
+                                                    ? "text-amber-400 fill-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]"
+                                                    : "text-[#ebdcc9]/30"
+                                                }`}
+                                        />
+                                    </button>
+                                ))}
                             </div>
 
-                            {/* সাবমিট বাটন */}
+                            <textarea
+                                value={comment}
+                                onChange={(e) => setComment(e.target.value)}
+                                className="w-full min-h-[120px] border border-[#ebdcc9]/20 focus:border-[#ebdcc9] bg-[#ebdcc9] text-[#2c221e] p-3.5 rounded-xl text-sm outline-none transition-all duration-200 resize-none font-medium placeholder-[#2c221e]/50 shadow-md"
+                                placeholder="What's your breakdown or feedback on this..."
+                            />
+
                             <button
-                                type="submit"
-                                className="w-full flex items-center justify-center gap-2 bg-[#2c221e] hover:bg-[#4a3b35] text-[#ebdcc9] py-3 rounded-xl text-xs font-black uppercase tracking-wider shadow-sm transition-colors duration-300"
+                                disabled={submitting}
+                                className="bg-[#ebdcc9] hover:bg-white text-[#2c221e] font-black px-4 py-3.5 rounded-xl w-full flex gap-2 justify-center items-center text-sm uppercase tracking-widest shadow-md transition-all duration-200 active:scale-[0.98] disabled:opacity-50 cursor-pointer group"
                             >
-                                <Send className="w-3.5 h-3.5" />
-                                <span>Submit Review</span>
+                                <Send className="w-4 h-4 text-[#2c221e] group-hover:translate-x-0.5 transition-transform" />
+                                <span>{submitting ? "Publishing..." : "Publish Review"}</span>
                             </button>
                         </form>
                     ) : (
-                        /* === AFTER STATE: থ্যাংক ইউ বক্স === */
-                        <div className="bg-emerald-500/10 border border-emerald-500/30 rounded-2xl p-4 flex items-start gap-3 transition-all duration-500 animate-fadeIn">
-                            <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0 mt-0.5" />
-                            <p className="text-xs sm:text-sm font-semibold text-emerald-800 leading-relaxed">
-                                You have already reviewed this prompt template. Thank you for your feedback!
+                        <div className="text-center py-8 space-y-3 bg-[#4a3b35]/20 rounded-xl p-4 border border-[#ebdcc9]/10">
+                            <div className="w-12 h-12 bg-amber-400 text-[#2c221e] flex items-center justify-center rounded-xl mx-auto font-black text-xl shadow-md">✓</div>
+                            <h4 className="text-sm font-black text-[#ebdcc9]">Review Submitted</h4>
+                            <p className="text-xs text-[#ebdcc9]/60 font-medium">
+                                Thank you for your ecosystem contribution!
                             </p>
                         </div>
                     )}
                 </div>
 
-                {/* ডানপাশ: রিভিউ লিস্ট ডিসপ্লে (২ কলাম) */}
-                <div className="lg:col-span-2 space-y-4 w-full">
-                    {reviews.length === 0 ? (
-                        /* নো রিভিউ এম্পটি স্টেট (Before) */
-                        <div className="bg-white/30 rounded-3xl p-8 border border-[#dfcbaf] border-dashed flex flex-col items-center justify-center text-center py-12 space-y-2">
-                            <MessageSquare className="w-8 h-8 text-[#2c221e]/30" />
-                            <p className="text-xs sm:text-sm font-bold text-[#2c221e]/60">
-                                No reviews submitted yet. Be the first to share your thoughts!
-                            </p>
+                {/* REVIEWS LIST */}
+                <div className="lg:col-span-2 space-y-4">
+                    {loading ? (
+                        <div className="space-y-4">
+                            {[1, 2].map((i) => (
+                                <div key={i} className="border-2 border-[#dfcbaf] bg-white p-5 rounded-2xl animate-pulse h-24" />
+                            ))}
+                        </div>
+                    ) : reviews.length === 0 ? (
+                        <div className="text-center py-16 border-2 border-dashed border-[#dfcbaf] rounded-2xl bg-white/50 backdrop-blur-sm">
+                            <p className="text-sm font-black text-[#2c221e]/40 uppercase tracking-widest">No review entries found</p>
+                            <p className="text-xs text-[#2c221e]/40 mt-1">Be the first investigator to review!</p>
                         </div>
                     ) : (
-                        /* রিভিউ লিস্ট (After) */
-                        reviews.map((rev) => (
-                            <div
-                                key={rev.id}
-                                className="bg-white/50 backdrop-blur-md rounded-2xl p-5 border border-[#dfcbaf] space-y-3 shadow-sm animate-slideDown"
-                            >
-                                <div className="flex items-start justify-between gap-4">
-                                    <div className="flex items-center gap-3">
-                                        <div className="w-8 h-8 rounded-full bg-[#2c221e] text-[#ebdcc9] flex items-center justify-center font-bold text-xs border border-[#dfcbaf]">
-                                            <User className="w-4 h-4" />
-                                        </div>
-                                        <div>
-                                            <h4 className="text-xs sm:text-sm font-black text-[#2c221e]">
-                                                {rev.email.split('@')[0]}
-                                            </h4>
-                                            <span className="text-[10px] font-bold text-[#2c221e]/40">
-                                                📅 {rev.date}
+                        <div className="grid grid-cols-1 gap-4">
+                            {reviews.map((r) => (
+                                <div
+                                    key={r._id}
+                                    className="border-2 border-[#dfcbaf]/80 hover:border-[#2c221e] bg-white hover:bg-[#ebdcc9]/10 p-5 rounded-2xl transition-all duration-300 flex gap-4 items-start shadow-[0_4px_20px_rgba(44,34,30,0.02)] hover:shadow-[0_10px_25px_rgba(44,34,30,0.06)] group"
+                                >
+                                    <div className="w-10 h-10 rounded-xl bg-[#2c221e] text-[#ebdcc9] flex items-center justify-center font-bold shadow-md shrink-0 border border-[#dfcbaf]/50">
+                                        <User size={18} />
+                                    </div>
+
+                                    <div className="flex-1 space-y-2 min-w-0">
+                                        <div className="flex items-center justify-between gap-4 border-b border-[#dfcbaf]/50 pb-1.5">
+                                            <b className="text-sm text-[#2c221e] capitalize font-black truncate tracking-tight">
+                                                {r.userEmail ? r.userEmail.split("@")[0] : "Explorer"}
+                                            </b>
+
+                                            <span className="text-xs font-black px-2.5 py-1 rounded-lg bg-[#2c221e] text-amber-400 flex items-center gap-1 shadow-sm shrink-0 border border-[#dfcbaf]/20">
+                                                {r.rating} <Star size={12} className="fill-amber-400 text-amber-400" />
                                             </span>
                                         </div>
-                                    </div>
-
-                                    {/* রিভিউর নিজস্ব স্টার রেটিং */}
-                                    <div className="flex items-center gap-0.5">
-                                        {[1, 2, 3, 4, 5].map((star) => (
-                                            <Star
-                                                key={star}
-                                                className={`w-3.5 h-3.5 ${star <= rev.rating
-                                                        ? "text-amber-600 fill-amber-600"
-                                                        : "text-[#2c221e]/20"
-                                                    }`}
-                                            />
-                                        ))}
+                                        <p className="text-sm text-[#2c221e]/90 leading-relaxed pt-1 font-semibold tracking-wide break-words">
+                                            {r.comment}
+                                        </p>
                                     </div>
                                 </div>
-
-                                <p className="text-xs sm:text-sm font-medium text-[#2c221e]/80 italic leading-relaxed pl-1">
-                                    "{rev.comment}"
-                                </p>
-                            </div>
-                        ))
+                            ))}
+                        </div>
                     )}
                 </div>
 
