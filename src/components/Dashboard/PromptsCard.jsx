@@ -3,12 +3,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-const PromptsCard = ({ cardData, ratingValue }) => {
+const PromptsCard = ({ cardData }) => {
     return (
         <div className="w-full bg-white/60 backdrop-blur-md rounded-[24px] border border-[#dfcbaf] p-4 flex flex-col justify-between h-full shadow-[0_4px_20px_rgba(44,34,30,0.02)] hover:shadow-[0_10px_30px_rgba(44,34,30,0.08)] transition-all duration-300 group ">
-            
+
             <div className="flex flex-col flex-grow">
-                
+
                 <div className="relative w-full aspect-video rounded-[16px] overflow-hidden bg-[#2c221e]/5 shrink-0 mb-4">
                     <Image
                         src={cardData.image || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe"}
@@ -61,7 +61,9 @@ const PromptsCard = ({ cardData, ratingValue }) => {
                             <Copy className="w-3 h-3 opacity-60" /> {cardData.copies || 0}
                         </span>
                         <span className="flex items-center gap-0.5 text-amber-700">
-                            <Star className="w-3 h-3 fill-current" /> <span>{cardData.averageRating.toFixed(1)} ({cardData.totalReviews})</span>
+                            <span>
+                                {(Number(cardData?.averageRating || 0)).toFixed(1)} ({cardData?.totalReviews || 0})
+                            </span>
                         </span>
                     </div>
                 </div>

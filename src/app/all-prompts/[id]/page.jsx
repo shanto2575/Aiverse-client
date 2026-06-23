@@ -1,10 +1,12 @@
+
 import { baseUrl } from "@/lib/baseUrl";
-import React from "react";
 import { Flag, Star, User } from "lucide-react";
 import CopyButton from "@/components/CopyButton";
 import CommunityReviews from "@/components/CommunityReviews";
 import BookmarkButton from "@/components/Dashboard/user/bookmarks/BookmarkButton";
 import { getUser } from "@/lib/session";
+import ReportSection from "@/components/Dashboard/user/reports/ReportSection";
+import BackButton from "@/components/BackButton";
 
 const fetchPrompt = async (id) => {
     try {
@@ -46,6 +48,7 @@ const PromptsDetailsPage = async ({ params }) => {
 
     return (
         <div className="min-h-screen bg-[#ebdcc9] text-[#2c221e] antialiased py-12 px-4 sm:px-6 lg:px-8">
+            <BackButton />
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
 
                 {/* Left Side */}
@@ -65,9 +68,10 @@ const PromptsDetailsPage = async ({ params }) => {
                                     prompt={prompt}
                                 />
 
-                                <button className="p-2.5 rounded-xl border border-[#dfcbaf] hover:bg-[#2c221e]/5 text-[#2c221e] transition-colors bg-white/40">
-                                    <Flag className="w-4 h-4" />
-                                </button>
+                                <ReportSection
+                                    promptId={prompt._id.toString()}
+                                    userEmail={user?.email}
+                                />
                             </div>
                         </div>
 
@@ -110,9 +114,13 @@ const PromptsDetailsPage = async ({ params }) => {
                                         </p>
                                     </div>
 
-                                    <button className="px-8 py-4 rounded-2xl bg-cyan-500 text-black font-bold text-sm sm:text-base hover:scale-105 transition-transform">
-                                        Subscribe to Premium ($5)
-                                    </button>
+                                    <form action={'/api/checkout_sessions'} method='POST'>
+                                        <button
+                                            type="submit"
+                                            className="px-8 py-4 rounded-2xl bg-cyan-500 text-black font-bold text-sm sm:text-base hover:scale-105 transition-transform">
+                                            Subscribe to Premium ($5)
+                                        </button>
+                                    </form>
                                 </div>
                             ) : (
                                 <div className="font-mono text-xs sm:text-sm leading-relaxed whitespace-pre-wrap w-full">
@@ -209,7 +217,7 @@ const PromptsDetailsPage = async ({ params }) => {
                                     Bookmarks
                                 </span>
 
-                                <span className="text-base font-black">0</span>
+                                <span className="text-base font-black">{prompt.bookmarkCount}</span>
                             </div>
 
                             {/* Rating */}

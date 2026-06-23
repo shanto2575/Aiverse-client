@@ -85,14 +85,16 @@ const MyPromptTable = ({ prompts = [] }) => {
                                     <Table.Cell className="text-right">
                                         <div className="flex items-center justify-end gap-2">
                                             {/* Details Button */}
-                                            <button className="p-2 bg-[#2c221e] hover:bg-[#4a3b35] text-[#ebdcc9] rounded-xl transition-all duration-200 shadow-sm active:scale-95" title="Details">
-                                                <Eye size={14} />
-                                            </button>
+                                            <Link href={`/all-prompts/${item._id}`}>
+                                                <button className="p-2 bg-[#2c221e] hover:bg-[#4a3b35] text-[#ebdcc9] rounded-xl transition-all duration-200 shadow-sm active:scale-95" title="Details">
+                                                    <Eye size={14} />
+                                                </button>
+                                            </Link>
 
                                             <MyPromptsEditsButton item={item} />
 
                                             {/* Delete Button */}
-                                            <MyPromptsDeleteButton  item={item}/>
+                                            <MyPromptsDeleteButton item={item} />
                                         </div>
                                     </Table.Cell>
                                 </Table.Row>

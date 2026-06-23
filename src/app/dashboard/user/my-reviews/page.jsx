@@ -36,7 +36,6 @@ const MyReviewsPage = () => {
   }, [userEmail]);
 
   return (
-    // ব্যাকগ্রাউন্ড: #ebdcc9
     <div className="max-w-7xl mx-auto p-6 text-[#2c221e] min-h-screen bg-[#ebdcc9]">
 
       {/* HEADER */}

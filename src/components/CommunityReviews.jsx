@@ -1,11 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Star, Send, User, MessageSquare, Lock } from "lucide-react"; 
+import { Star, Send, User, MessageSquare, Lock } from "lucide-react";
 import { baseUrl } from "@/lib/baseUrl";
 import toast from "react-hot-toast";
 
-export default function CommunityReviews({ promptId, userEmail, userPlan, visibility,promptaiEngine,promptTitle }) {
+export default function CommunityReviews({ promptId, userEmail, userPlan, visibility, promptaiEngine, promptTitle }) {
     const [reviews, setReviews] = useState([]);
     const [rating, setRating] = useState(5);
     const [comment, setComment] = useState("");
@@ -49,7 +49,7 @@ export default function CommunityReviews({ promptId, userEmail, userPlan, visibi
             const res = await fetch(`${baseUrl}/api/reviews`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ promptId, userEmail, rating, comment,promptTitle,promptaiEngine }),
+                body: JSON.stringify({ promptId, userEmail, rating, comment, promptTitle, promptaiEngine }),
             });
 
             if (!res.ok) {
@@ -94,11 +94,17 @@ export default function CommunityReviews({ promptId, userEmail, userPlan, visibi
         }
     };
 
-    const isPremiumLocked =
-        visibility === "PRIVATE" || visibility === "PREMIUM";
+    const visibilityValue = (visibility || "").toLowerCase();
+
+    const isPublic = visibilityValue === "public" || visibilityValue === "free";
+    const isPrivate = visibilityValue === "private";
 
     const canReview =
-        !isPremiumLocked && userPlan === "pro";
+        !!userEmail &&
+        (
+            isPublic ||
+            (isPrivate && userPlan === "pro")
+        );
 
     return (
         <div className="max-w-7xl mx-auto space-y-8 p-2 text-[#2c221e]">
@@ -151,8 +157,8 @@ export default function CommunityReviews({ promptId, userEmail, userPlan, visibi
                                     >
                                         <Star
                                             className={`w-6 h-6 transition-all ${star <= rating
-                                                    ? "text-amber-400 fill-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]"
-                                                    : "text-[#ebdcc9]/30"
+                                                ? "text-amber-400 fill-amber-400 drop-shadow-[0_0_8px_rgba(251,191,36,0.5)]"
+                                                : "text-[#ebdcc9]/30"
                                                 }`}
                                         />
                                     </button>
