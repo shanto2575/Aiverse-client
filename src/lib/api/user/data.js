@@ -1,3 +1,4 @@
+import { baseUrl } from "@/lib/baseUrl";
 import { serverFetch } from "@/lib/server"
 
 export const userPrompts=async(email)=>{
@@ -9,10 +10,14 @@ export const Bookmarks=async(email)=>{
     return res;
 }
 
-export const allPrompts=async(query)=>{
-    const res=await serverFetch(`/api/prompts?${query}`)
-    return res;
-}
+
+export const allPrompts = async (params) => {
+    const res = await fetch(`${baseUrl}/api/prompts?${params.toString()}`, {
+        cache: "no-store",
+    });
+
+    return res.json();
+};
 
 export const creatorPrompts=async(email)=>{
     const res=await serverFetch(`/api/creator-prompts/${email}`)

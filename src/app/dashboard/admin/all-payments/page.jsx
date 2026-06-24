@@ -6,15 +6,15 @@ const PaymentsPage = async () => {
 
     return (
         <div>
-            <div className="p-6 border-b border-[#dfcbaf]">
-                <h2 className="text-3xl font-bold text-[#2c221e]">
+            <div className="p-4 md:p-6 border-b border-[#dfcbaf]">
+                <h2 className="text-2xl md:text-3xl font-bold text-[#2c221e]">
                     Stripe Premium Payments Log
                 </h2>
-                <p className="text-[#2c221e]/70 mt-2 text-sm">
+                <p className="text-[#2c221e]/70 mt-2 text-xs md:text-sm">
                     Comprehensive database of customer subscription transactions.
                 </p>
             </div>
-            <section className="w-full min-h-screen  p-8">
+            <section className="w-full min-h-screen p-4 md:p-6 lg:p-8">
                 <PaymentLogsTable payments={payments} />
             </section>
         </div>

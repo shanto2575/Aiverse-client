@@ -9,7 +9,6 @@ import { UserDeleteButton } from "./UserDeleteButton";
 import { showToast } from "@/components/Utility/toast";
 
 const UserManagementTable = ({ users = [] }) => {
-
     const [userList, setUserList] = useState(users);
 
     const handleRoleChange = async (id, newRole) => {
@@ -39,18 +38,18 @@ const UserManagementTable = ({ users = [] }) => {
     return (
         <div className="w-full rounded-2xl border border-[#dfcbaf] bg-white/10 shadow-lg overflow-hidden">
             {/* Header */}
-            <div className="p-6 border-b border-[#dfcbaf]">
-                <h2 className="text-3xl font-bold text-[#2c221e]">
+            <div className="p-4 md:p-6 border-b border-[#dfcbaf]">
+                <h2 className="text-2xl md:text-3xl font-bold text-[#2c221e]">
                     User Role & Accounts Management
                 </h2>
-                <p className="text-[#2c221e]/70 mt-2 text-sm">
+                <p className="text-[#2c221e]/70 mt-2 text-xs md:text-sm">
                     Review accounts, modify role scopes, and delete users.
                 </p>
             </div>
 
-            {/* Table */}
-            <div className="overflow-x-auto">
-                <table className="w-full text-left">
+            {/* 1. Desktop & Tablet View (Large Screens) */}
+            <div className="hidden md:block overflow-x-auto">
+                <table className="w-full text-left table-auto min-w-[800px]">
                     <thead className="border-b border-[#dfcbaf] text-[#2c221e]/70 text-sm uppercase">
                         <tr>
                             <th className="p-5">Profile Details</th>
@@ -63,7 +62,7 @@ const UserManagementTable = ({ users = [] }) => {
                     </thead>
 
                     <tbody>
-                        {users.map((user) => (
+                        {userList.map((user) => (
                             <tr
                                 key={user._id}
                                 className="border-b border-[#dfcbaf] hover:bg-[#ebdcc9]/40 transition"
@@ -96,10 +95,11 @@ const UserManagementTable = ({ users = [] }) => {
                                 {/* Subscription */}
                                 <td className="p-5">
                                     <span
-                                        className={`px-3 py-1 rounded-full text-xs font-black tracking-wider border ${user.plan === "premium" || user.plan === "pro"
+                                        className={`px-3 py-1 rounded-full text-xs font-black tracking-wider border ${
+                                            user.plan === "premium" || user.plan === "pro"
                                                 ? "bg-gradient-to-r from-amber-500 to-yellow-600 text-white border-amber-600 shadow-[0_0_10px_rgba(245,158,11,0.3)] "
                                                 : "bg-[#2c221e]/5 text-[#2c221e]/60 border-[#2c221e]/15 font-bold"
-                                            }`}
+                                        }`}
                                     >
                                         {user.plan?.toUpperCase()}
                                     </span>
@@ -110,7 +110,7 @@ const UserManagementTable = ({ users = [] }) => {
                                     <select
                                         defaultValue={user.role}
                                         onChange={(e) => handleRoleChange(user._id, e.target.value)}
-                                        className="bg-[#ebdcc9]/30 border border-[#dfcbaf] text-[#2c221e] rounded-lg px-4 py-2 focus:outline-none"
+                                        className="bg-[#ebdcc9]/30 border border-[#dfcbaf] text-[#2c221e] rounded-lg px-4 py-2 focus:outline-none cursor-pointer"
                                     >
                                         <option value="user">User</option>
                                         <option value="creator">Creator</option>
@@ -137,6 +137,81 @@ const UserManagementTable = ({ users = [] }) => {
                         ))}
                     </tbody>
                 </table>
+            </div>
+
+            {/* 2. Mobile View (Card-based Layout for Small Screens) */}
+            <div className="block md:hidden divide-y divide-[#dfcbaf]">
+                {userList.map((user) => (
+                    <div key={user._id} className="p-4 flex flex-col gap-3 hover:bg-[#ebdcc9]/20 transition">
+                        
+                        {/* Profile & Subscription Header */}
+                        <div className="flex items-center justify-between gap-2">
+                            <div className="flex items-center gap-3">
+                                {user.image ? (
+                                    <Image
+                                        src={user.image}
+                                        alt={user.name}
+                                        width={36}
+                                        height={36}
+                                        className="rounded-full object-cover"
+                                    />
+                                ) : (
+                                    <div className="w-9 h-9 rounded-full bg-[#2c221e] flex items-center justify-center text-white text-sm font-bold">
+                                        {user.name?.charAt(0).toUpperCase()}
+                                    </div>
+                                )}
+                                <span className="font-semibold text-base text-[#2c221e]">
+                                    {user.name}
+                                </span>
+                            </div>
+
+                            {/* Subscription Badge */}
+                            <span
+                                className={`px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-wider border ${
+                                    user.plan === "premium" || user.plan === "pro"
+                                        ? "bg-gradient-to-r from-amber-500 to-yellow-600 text-white border-amber-600 shadow-[0_0_10px_rgba(245,158,11,0.3)] "
+                                        : "bg-[#2c221e]/5 text-[#2c221e]/60 border-[#2c221e]/15 font-bold"
+                                }`}
+                            >
+                                {user.plan?.toUpperCase()}
+                            </span>
+                        </div>
+
+                        {/* Email Address */}
+                        <div className="text-xs text-[#2c221e]/90 break-all">
+                            <span className="font-medium text-[#2c221e]/60">Email:</span> {user.email}
+                        </div>
+
+                        {/* Registered Date */}
+                        <div className="flex items-center gap-1.5 text-xs text-[#2c221e]/70">
+                            <Calendar size={14} />
+                            <span>Joined: {new Date(user.createdAt).toLocaleDateString()}</span>
+                        </div>
+
+                        {/* Role Selection & Actions Footer */}
+                        <div className="flex items-center justify-between gap-2 pt-2 border-t border-[#dfcbaf]/40 mt-1">
+                            <div>
+                                <select
+                                    defaultValue={user.role}
+                                    onChange={(e) => handleRoleChange(user._id, e.target.value)}
+                                    className="bg-[#ebdcc9]/30 border border-[#dfcbaf] text-[#2c221e] rounded-lg px-3 py-1.5 text-xs focus:outline-none cursor-pointer"
+                                >
+                                    <option value="user">User</option>
+                                    <option value="creator">Creator</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <UserDeleteButton
+                                    userId={user._id}
+                                    setUserList={setUserList}
+                                />
+                            </div>
+                        </div>
+
+                    </div>
+                ))}
             </div>
         </div>
     );
