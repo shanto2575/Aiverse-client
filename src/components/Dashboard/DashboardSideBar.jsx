@@ -55,12 +55,12 @@ export default function DashboardSideBar() {
             { icon: BookOpen, label: "My Prompts", link: "/dashboard/creator/my-prompts" },
         ],
         admin: [
-            { icon: User, label: "Profile", link: "/dashboard/admin/profile" },
+            { icon: User, label: "My Profile", link: "/dashboard/admin" },
+            { icon: BarChart3, label: "Admin Analytics", link: "/dashboard/admin/analytics" },
             { icon: Users, label: "All Users", link: "/dashboard/admin/all-users" },
             { icon: BookOpen, label: "All Prompts", link: "/dashboard/admin/all-prompts" },
             { icon: CreditCard, label: "All Payments", link: "/dashboard/admin/all-payments" },
             { icon: AlertTriangle, label: "Reported Prompts", link: "/dashboard/admin/reported-prompts" },
-            { icon: BarChart3, label: "Analytics", link: "/dashboard/admin/analytics" },
         ],
     };
 
@@ -155,7 +155,6 @@ export default function DashboardSideBar() {
                             </Link>
                         ))}
                     </div>
-
                 </Drawer.Content>
             </Drawer>
         </>
