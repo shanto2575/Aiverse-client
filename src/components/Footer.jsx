@@ -2,115 +2,162 @@
 
 import { usePathname } from "next/navigation";
 import Link from "next/link";
-import { LogoGithub, LogoLinkedin, Gear, ArrowUpRight } from "@gravity-ui/icons";
+import {
+    LogoGithub,
+    LogoLinkedin,
+    Globe,
+    Heart,
+    NodesRight,
+} from "@gravity-ui/icons";
+import { FaTwitter } from "react-icons/fa";
 
 export default function Footer() {
     const currentYear = new Date().getFullYear();
-
     const pathname = usePathname();
 
-
-  if (pathname.includes('dashboard')) {
-    return null;
-  }
+    // Dashboard পেজগুলোতে ফুটার হাইড রাখার লজিক
+    if (pathname.includes('dashboard')) {
+        return null;
+    }
 
     return (
-        <footer className="w-full relative mt-20 border-t border-[#dfcbaf]/60 bg-gradient-to-b from-transparent to-[#ebdcc9]/20">
-            {/* Background Subtle Tech-Grid Element */}
-            <div className="absolute inset-0 opacity-[0.02] pointer-events-none bg-[radial-gradient(#2c221e_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <footer className="bg-[#ebdcc9] border-t border-[#dfcbaf] relative overflow-hidden">
+            {/* Background Subtle Accent Glow */}
+            <div className="absolute -bottom-20 -left-20 w-80 h-80 bg-[#78541c]/5 rounded-full blur-3xl pointer-events-none" />
+            <div className="absolute -top-20 -right-20 w-80 h-80 bg-[#bfa054]/5 rounded-full blur-3xl pointer-events-none" />
 
-            <div className="w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-16 text-[#2c221e] relative z-10">
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-12 pb-12">
+            <div className="max-w-7xl mx-auto px-6 py-16 relative z-10">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
 
-                    {/* Brand Vision Column */}
-                    <div className="md:col-span-5 space-y-5">
-                        <Link href="/" className="inline-flex items-center gap-2 group">
-                            <span className="text-2xl font-black tracking-tighter bg-gradient-to-r from-[#2c221e] to-[#4a3b35] bg-clip-text text-transparent transition-all">
-                                Alverse
-                            </span>
-                            <span className="h-1.5 w-1.5 rounded-full bg-[#2c221e] group-hover:scale-150 transition-transform duration-300"></span>
-                        </Link>
-                        <p className="text-sm text-[#2c221e]/70 max-w-sm leading-relaxed font-medium">
-                            The next-generation prompt engineering ecosystem. Discover, iterate, and secure production-ready AI inputs for global LLMs.
+                    {/* Brand Column */}
+                    <div className="space-y-4">
+                        <div className="flex items-center gap-2.5">
+                            <div className="p-2 rounded-xl bg-[#78541c]/10 text-[#78541c]">
+                                <NodesRight className="w-5 h-5 animate-pulse" />
+                            </div>
+                            <h2 className="text-2xl font-black text-[#2c221e] tracking-tight">
+                                Aiverse
+                            </h2>
+                        </div>
+
+                        <p className="text-[#2c221e]/70 leading-relaxed text-sm font-medium">
+                            Your ultimate hub for engineering production-ready AI prompts.
+                            Unlock the full potential of LLMs, streamline your development
+                            workflows, and build next-gen applications seamlessly.
+                        </p>
+                    </div>
+
+                    {/* Platform Links */}
+                    <div>
+                        <h3 className="text-[#2c221e] font-bold text-xs uppercase tracking-[0.2em] mb-6">
+                            Platform
+                        </h3>
+
+                        <div className="flex flex-col gap-3.5 text-sm font-medium text-[#2c221e]/70">
+                            <Link href="/all-prompts" className="hover:text-[#78541c] transition-colors duration-200">
+                                All Prompts
+                            </Link>
+                            <Link href="/trending" className="hover:text-[#78541c] transition-colors duration-200">
+                                Trending Prompts
+                            </Link>
+                            <Link href="/signin" className="hover:text-[#78541c] transition-colors duration-200">
+                                Login
+                            </Link>
+                            <Link href="/signup" className="hover:text-[#78541c] transition-colors duration-200">
+                                Register
+                            </Link>
+                            <Link href="/demo-user" className="hover:text-[#78541c] transition-colors duration-200">
+                                Demo User
+                            </Link>
+                        </div>
+                    </div>
+
+                    {/* Tech Stack Resources Links */}
+                    <div>
+                        <h3 className="text-[#2c221e] font-bold text-xs uppercase tracking-[0.2em] mb-6">
+                            Resources
+                        </h3>
+
+                        <div className="flex flex-col gap-3.5 text-sm font-medium text-[#2c221e]/70">
+                            <p className="hover:text-[#78541c] cursor-default transition-colors duration-200">
+                                Next.js
+                            </p>
+                            <p className="hover:text-[#78541c] cursor-default transition-colors duration-200">
+                                Better Auth
+                            </p>
+                            <p className="hover:text-[#78541c] cursor-default transition-colors duration-200">
+                                MongoDB
+                            </p>
+                            <p className="hover:text-[#78541c] cursor-default transition-colors duration-200">
+                                Express
+                            </p>
+                            <p className="hover:text-[#78541c] cursor-default transition-colors duration-200">
+                                Node.js
+                            </p>
+                            <p className="hover:text-[#78541c] cursor-default transition-colors duration-200">
+                                JWT Token
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Connect & Support Column */}
+                    <div>
+                        <h3 className="text-[#2c221e] font-bold text-xs uppercase tracking-[0.2em] mb-6">
+                            Connect
+                        </h3>
+
+                        <div className="flex items-center gap-2.5 mb-6">
+                            <a
+                                href="#"
+                                className="w-10 h-10 rounded-xl border border-[#dfcbaf] bg-[#f5ebd7]/40 flex items-center justify-center text-[#2c221e]/70 hover:text-[#78541c] hover:border-[#78541c]/30 hover:bg-[#f5ebd7]/80 transition-all duration-300 shadow-sm"
+                            >
+                                <FaTwitter size={16} />
+                            </a>
+
+                            <a
+                                href="#"
+                                className="w-10 h-10 rounded-xl border border-[#dfcbaf] bg-[#f5ebd7]/40 flex items-center justify-center text-[#2c221e]/70 hover:text-[#78541c] hover:border-[#78541c]/30 hover:bg-[#f5ebd7]/80 transition-all duration-300 shadow-sm"
+                            >
+                                <LogoGithub size={16} />
+                            </a>
+
+                            <a
+                                href="#"
+                                className="w-10 h-10 rounded-xl border border-[#dfcbaf] bg-[#f5ebd7]/40 flex items-center justify-center text-[#2c221e]/70 hover:text-[#78541c] hover:border-[#78541c]/30 hover:bg-[#f5ebd7]/80 transition-all duration-300 shadow-sm"
+                            >
+                                <LogoLinkedin size={16} />
+                            </a>
+
+                            <a
+                                href="#"
+                                className="w-10 h-10 rounded-xl border border-[#dfcbaf] bg-[#f5ebd7]/40 flex items-center justify-center text-[#2c221e]/70 hover:text-[#78541c] hover:border-[#78541c]/30 hover:bg-[#f5ebd7]/80 transition-all duration-300 shadow-sm"
+                            >
+                                <Globe size={16} />
+                            </a>
+                        </div>
+
+                        <p className="text-xs font-bold text-[#2c221e]/50 uppercase tracking-wider">
+                            Questions? Support at:
                         </p>
 
-                        {/* Elegant Social Row */}
-                        <div className="flex items-center gap-3 pt-2">
-                            <a
-                                href="https://github.com"
-                                target="_blank"
-                                rel="noreferrer"
-                                className="p-2.5 rounded-xl border border-[#dfcbaf]/60 bg-[#ebdcc9]/30 hover:bg-[#2c221e] hover:text-[#ebdcc9] transition-all duration-300 shadow-sm group"
-                            >
-                                <LogoGithub className="w-4 h-4 transition-transform group-hover:scale-110" />
-                            </a>
-                            <a
-                                href="https://x.com"
-                                target="_blank"
-                                rel="noreferrer"
-                                className="p-2.5 rounded-xl border border-[#dfcbaf]/60 bg-[#ebdcc9]/30 hover:bg-[#2c221e] hover:text-[#ebdcc9] transition-all duration-300 shadow-sm group flex items-center justify-center"
-                            >
-                                <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 fill-current transition-transform group-hover:scale-110">
-                                    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-                                </svg>
-                            </a>
-                            <a
-                                href="https://linkedin.com"
-                                target="_blank"
-                                rel="noreferrer"
-                                className="p-2.5 rounded-xl border border-[#dfcbaf]/60 bg-[#ebdcc9]/30 hover:bg-[#2c221e] hover:text-[#ebdcc9] transition-all duration-300 shadow-sm group"
-                            >
-                                <LogoLinkedin className="w-4 h-4 transition-transform group-hover:scale-110" />
-                            </a>
-                        </div>
-                    </div>
-
-                    {/* Quick Navigation Links */}
-                    <div className="md:col-span-3 space-y-4">
-                        <h4 className="text-xs font-bold uppercase tracking-widest text-[#2c221e]/50">Navigation</h4>
-                        <ul className="space-y-3 text-sm font-semibold text-[#2c221e]/80">
-                            {[
-                                { name: "Marketplace", href: "/all-prompts" },
-                                { name: "Creator Dashboard", href: "/dashboard" },
-                                { name: "Dynamic Playground", href: "/" }
-                            ].map((link, idx) => (
-                                <li key={idx}>
-                                    <Link href={link.href} className="hover:text-[#2c221e] flex items-center gap-1 group transition-colors">
-                                        <span className="bg-left-bottom bg-gradient-to-r from-[#2c221e] to-[#2c221e] bg-[length:0%_1.5px] bg-no-repeat group-hover:bg-[length:100%_1.5px] transition-all duration-300 pb-0.5">
-                                            {link.name}
-                                        </span>
-                                        <ArrowUpRight className="w-3.5 h-3.5 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 text-[#2c221e]/60" />
-                                    </Link>
-                                </li>
-                            ))}
-                        </ul>
-                    </div>
-
-                    {/* Supported Engines Tags */}
-                    <div className="md:col-span-4 space-y-4">
-                        <h4 className="text-xs font-bold uppercase tracking-widest text-[#2c221e]/50">Supported Ecosystems</h4>
-                        <div className="flex flex-wrap gap-2 pt-1">
-                            {["ChatGPT 4o", "Midjourney v6", "Claude 3.5", "Gemini Pro", "Stable Diffusion"].map((tool, idx) => (
-                                <span
-                                    key={idx}
-                                    className="text-xs font-semibold border border-[#dfcbaf]/80 px-3 py-1 rounded-xl bg-[#ebdcc9]/20 backdrop-blur-sm shadow-sm text-[#2c221e]/90 hover:border-[#2c221e] hover:bg-[#ebdcc9]/40 transition-colors cursor-default"
-                                >
-                                    {tool}
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-
-                </div>
-
-                {/* Bottom Bar Section */}
-                <div className="pt-8 mt-4 border-t border-[#dfcbaf]/40 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-semibold text-[#2c221e]/60">
-                    <p>© {currentYear} Alverse Labs. Built for elite execution.</p>
-                    <div className="flex items-center gap-1.5 border border-[#dfcbaf]/60 bg-[#ebdcc9]/30 backdrop-blur-sm px-4 py-1.5 rounded-full shadow-sm text-[#2c221e]/80">
-                        <Gear className="w-3.5 h-3.5 animate-spin-[spin_4s_linear_infinite]" />
-                        <span className="tracking-wide">System Architecture Verified</span>
+                        <p className="text-[#78541c] font-bold text-sm mt-1 hover:underline cursor-pointer transition">
+                            Help@aiverse.com
+                        </p>
                     </div>
                 </div>
+
+                {/* Bottom Bar */}
+                <div className="border-t border-[#dfcbaf]/60 mt-14 pt-8 text-center">
+                    <p className="text-[#2c221e]/60 text-xs font-medium flex flex-wrap justify-center items-center gap-1.5">
+                        © {currentYear} Aiverse. All rights reserved. Created with
+                        <Heart className="w-3.5 h-3.5 text-[#78541c]" style={{ fill: "#78541c" }} />
+                        by
+                        <span className="font-bold text-[#2c221e] hover:text-[#78541c] cursor-pointer transition">
+                            Shanto Dev Sharma
+                        </span>
+                    </p>
+                </div>
+
             </div>
         </footer>
     );
