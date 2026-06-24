@@ -13,3 +13,8 @@ export const allPrompts=async(query)=>{
     const res=await serverFetch(`/api/prompts?${query}`)
     return res;
 }
+
+export const creatorPrompts=async(email)=>{
+    const res=await serverFetch(`/api/creator-prompts/${email}`)
+    return res;
+}

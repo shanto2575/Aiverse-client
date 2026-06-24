@@ -83,7 +83,7 @@ export default async function UserProfilePage() {
                             <FileText className="w-4 h-4" />
                             <span>Prompts Published</span>
                         </div>
-                        <p className="text-4xl font-black text-[#2c221e]">{data?.promptCount||0}</p>
+                        <p className="text-4xl font-black text-[#2c221e]">{data?.promptCount || 0}</p>
                     </div>
 
                     <div className="bg-[#ebdcc9]/40 border border-[#dfcbaf]/60 rounded-2xl p-5 space-y-3 shadow-sm">

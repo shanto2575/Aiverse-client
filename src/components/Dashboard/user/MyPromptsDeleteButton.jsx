@@ -21,6 +21,7 @@ export function MyPromptsDeleteButton({ item }) {
     if (data.deletedCount > 0) {
       toast.success("Delete successfully");
       router.refresh();
+      window.location.reload()
     }
   }
   return (
