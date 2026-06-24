@@ -55,3 +55,58 @@ export const handleDelete = async (id, setPromptList) => {
         showToast.success("Prompt deleted successfully");
     }
 };
+
+
+
+export const handleDismissReport = async (id, setReports) => {
+    const res = await fetch(`${baseUrl}/api/admin/reports/${id}`, {
+        method: "DELETE",
+    });
+
+    const data = await res.json();
+
+    if (data.deletedCount > 0) {
+        setReports((prev) =>
+            prev.filter((report) => report._id !== id)
+        );
+
+        showToast.success("Report dismissed");
+    }
+};
+
+export const handleRemovePrompt = async (id, setReports) => {
+    const res = await fetch(
+        `${baseUrl}/api/admin/reports/${id}/remove-prompt`,
+        {
+            method: "DELETE",
+        }
+    );
+
+    const data = await res.json();
+
+    if (data.success) {
+        setReports((prev) =>
+            prev.filter((report) => report._id !== id)
+        );
+
+        showToast.success("Prompt removed successfully");
+    }
+};
+export const handleWarnCreator = async (id, setReports) => {
+    const res = await fetch(
+        `${baseUrl}/api/admin/reports/${id}/remove-prompt`,
+        {
+            method: "DELETE",
+        }
+    );
+
+    const data = await res.json();
+
+    if (data.success) {
+        setReports((prev) =>
+            prev.filter((report) => report._id !== id)
+        );
+
+        showToast.success("Warn Creator successfully");
+    }
+};

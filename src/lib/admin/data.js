@@ -40,3 +40,12 @@ export const getAdminPayments = async () => {
 
     return res.json();
 };
+
+
+export const getAdminReports = async () => {
+    const res = await fetch(`${baseUrl}/api/admin/reports`, {
+        cache: "no-store",
+    });
+
+    return res.json();
+};
