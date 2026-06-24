@@ -3,8 +3,11 @@
 import { Copy } from "lucide-react";
 import toast from "react-hot-toast";
 import { baseUrl } from "@/lib/baseUrl";
+import { showToast } from "./Utility/toast";
+import { useRouter } from "next/navigation";
 
 export default function CopyButton({ textToCopy, promptId }) {
+    const router = useRouter();
     const handleCopy = async () => {
         try {
             await navigator.clipboard.writeText(textToCopy);
@@ -17,10 +20,12 @@ export default function CopyButton({ textToCopy, promptId }) {
             );
 
             if (res.ok) {
-                toast.success("Prompt copied!");
+                router.refresh()
+                showToast.success("Prompt copied!");
             }
         } catch (error) {
-            toast.error("Failed to copy!");
+            router.refresh()
+            showToast.error("Failed to copy!");
         }
     };
 

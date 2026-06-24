@@ -1,13 +1,16 @@
 "use client";
 
+import { showToast } from "@/components/Utility/toast";
 import { baseUrl } from "@/lib/baseUrl";
 import { Bookmark } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 export default function BookmarkButton({ promptId, userEmail, prompt }) {
     const [bookmarked, setBookmarked] = useState(false);
     const [loading, setLoading] = useState(false);
+    const router = useRouter();
 
     // CHECK
     useEffect(() => {
@@ -19,7 +22,7 @@ export default function BookmarkButton({ promptId, userEmail, prompt }) {
                 const data = await res.json();
                 setBookmarked(data.bookmarked);
             } catch (err) {
-                toast.error("Failed to check bookmark");
+                showToast.error("Failed to check bookmark");
             }
         };
 
@@ -28,44 +31,56 @@ export default function BookmarkButton({ promptId, userEmail, prompt }) {
 
     // TOGGLE
     const handleBookmark = async () => {
+        if (loading) return;
+
         setLoading(true);
 
         try {
             if (!bookmarked) {
                 const res = await fetch(`${baseUrl}/api/bookmarks`, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ userEmail, promptId, prompt }),
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        userEmail,
+                        promptId,
+                        prompt,
+                    }),
                 });
 
                 const data = await res.json();
 
-                if (!res.ok) throw new Error(data?.message || "Failed");
-
-                if (data.message === "Already bookmarked") {
-                    toast("Already bookmarked ⚠️");
-                } else {
-                    setBookmarked(true);
-                    toast.success("Added to bookmarks");
+                if (!res.ok) {
+                    throw new Error(data.message || "Failed");
                 }
+
+                setBookmarked(true);
+                router.refresh()
+                showToast.success("Added to bookmarks");
             } else {
                 const res = await fetch(
                     `${baseUrl}/api/bookmarks?userEmail=${userEmail}&promptId=${promptId}`,
-                    { method: "DELETE" }
+                    {
+                        method: "DELETE",
+                    }
                 );
 
                 const data = await res.json();
 
-                if (!res.ok) throw new Error("Delete failed");
+                if (!res.ok) {
+                    throw new Error(data.message || "Failed");
+                }
 
                 setBookmarked(false);
-                toast.success("Bookmark removed");
+                router.refresh()
+                showToast.success("Bookmark removed");
             }
         } catch (err) {
-            toast.error(err.message);
+            showToast.error(err.message);
+        } finally {
+            setLoading(false);
         }
-
-        setLoading(false);
     };
 
     return (

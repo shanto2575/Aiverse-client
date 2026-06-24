@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { X, AlertTriangle } from "lucide-react"; // বাড়তি সুন্দর্যের জন্য আইকন যুক্ত করা হয়েছে
+import { X, AlertTriangle } from "lucide-react"; 
 import { baseUrl } from "@/lib/baseUrl";
-import toast from "react-hot-toast";
+import { showToast } from "@/components/Utility/toast";
 
 export default function ReportPromptModal({
     isOpen,
@@ -53,10 +53,8 @@ export default function ReportPromptModal({
                 setReason("");
                 setDescription("");
                 onClose();
-                toast.success('Reports Successfull')
-            } else {
-                alert(data.message || "Failed to submit report");
-            }
+                showToast.success('Reports Successfull')
+            } 
         } catch (error) {
         } finally {
             setLoading(false);
@@ -64,10 +62,8 @@ export default function ReportPromptModal({
     };
 
     return (
-        // 🌌 backdrop-blur-md দিয়ে পেছনের ব্যাকগ্রাউন্ড চমৎকার ব্লার করা হয়েছে
         <div className="fixed inset-0 bg-[#2c221e]/40 backdrop-blur-md flex items-center justify-center z-50 px-4 transition-all duration-300">
             
-            {/* 📦 মোডাল কার্ড ব্যাকগ্রাউন্ড: #ebdcc9 এবং বর্ডার: #dfcbaf */}
             <div className="bg-[#ebdcc9] text-[#2c221e] w-full max-w-md rounded-2xl p-6 space-y-5 relative border-2 border-[#dfcbaf] shadow-[0_20px_50px_rgba(44,34,30,0.3)] animate-in fade-in zoom-in-95 duration-200">
 
                 <button

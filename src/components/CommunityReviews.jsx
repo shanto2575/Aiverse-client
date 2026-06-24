@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from "react";
 import { Star, Send, User, MessageSquare, Lock } from "lucide-react";
 import { baseUrl } from "@/lib/baseUrl";
-import toast from "react-hot-toast";
+import showToast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 
 export default function CommunityReviews({ promptId, userEmail, userPlan, visibility, promptaiEngine, promptTitle }) {
     const [reviews, setReviews] = useState([]);
@@ -16,19 +17,28 @@ export default function CommunityReviews({ promptId, userEmail, userPlan, visibi
 
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
+    const router = useRouter();
 
     const fetchReviews = async () => {
         try {
             setLoading(true);
-            const res = await fetch(`${baseUrl}/api/reviews/${promptId}`);
+
+            const res = await fetch(
+                `${baseUrl}/api/reviews/${promptId}`
+            );
+
             const data = await res.json();
 
             setReviews(data.reviews || []);
-            setTotalReviews(data.totalReviews);
-            setAverageRating(data.averageRating);
+            setTotalReviews(data.totalReviews || 0);
+            setAverageRating(data.averageRating || 0);
 
-            const mine = data.reviews.find((r) => r.userEmail === userEmail);
-            if (mine) setHasReviewed(true);
+            const mine = data.reviews?.find(
+                (r) => r.userEmail === userEmail
+            );
+
+            setHasReviewed(!!mine);
+
         } catch (err) {
             console.log(err);
         } finally {
@@ -42,25 +52,50 @@ export default function CommunityReviews({ promptId, userEmail, userPlan, visibi
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!comment.trim()) return;
+
+        if (submitting) return;
+
+        if (!comment.trim()) {
+            showToast.error("Comment required");
+            return;
+        }
 
         try {
             setSubmitting(true);
+
             const res = await fetch(`${baseUrl}/api/reviews`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ promptId, userEmail, rating, comment, promptTitle, promptaiEngine }),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    promptId,
+                    userEmail,
+                    rating,
+                    comment,
+                    promptTitle,
+                    promptaiEngine,
+                }),
             });
 
+            const data = await res.json();
+
             if (!res.ok) {
-                const errText = await res.text();
-                toast.error("Something went wrong!");
-                console.log(errText);
+                showToast.error(
+                    data.message || "Something went wrong"
+                );
                 return;
             }
 
-            const data = await res.json();
-            setReviews((prev) => [data.review, ...prev]);
+            setReviews((prev) => {
+                const filtered = prev.filter(
+                    (r) =>
+                        r.userEmail !== data.review.userEmail
+                );
+
+                return [data.review, ...filtered];
+            });
+
             setTotalReviews(data.totalReviews);
             setAverageRating(data.averageRating);
 
@@ -68,27 +103,13 @@ export default function CommunityReviews({ promptId, userEmail, userPlan, visibi
             setComment("");
             setRating(5);
 
-            toast.success("Review published! Reloading...", {
-                style: {
-                    border: '1px solid #dfcbaf',
-                    padding: '16px',
-                    color: '#ebdcc9',
-                    background: '#2c221e',
-                    fontWeight: 'bold',
-                },
-                iconTheme: {
-                    primary: '#fbbf24',
-                    secondary: '#2c221e',
-                },
-            });
+            showToast.success("Review published!");
 
-            setTimeout(() => {
-                location.reload();
-            }, 1000);
+            router.refresh();
 
         } catch (err) {
-            toast.error("Failed to submit review");
             console.log(err);
+            showToast.error("Failed to submit review");
         } finally {
             setSubmitting(false);
         }
