@@ -1,5 +1,5 @@
 import BookmarkCard from "@/components/Dashboard/user/bookmarks/BookmarksCard";
-import { Bookmarks as getBookmarks } from "@/lib/api/user/data";
+import { Bookmarks } from "@/lib/api/user/data";
 import { getUser } from "@/lib/session";
 
 const SavePromptsPage = async () => {
@@ -9,7 +9,7 @@ const SavePromptsPage = async () => {
         return <div>Please login first</div>;
     }
 
-    const bookmarks = await getBookmarks(user.email);
+    const bookmarks = await Bookmarks(user.email);
     // console.log(bookmarks)
 
     return (

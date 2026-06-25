@@ -1,3 +1,5 @@
+import { headers } from "next/headers";
+import { auth } from "../auth";
 import { baseUrl } from "../baseUrl";
 
 export const adminAnalytics = async () => {
@@ -12,12 +14,17 @@ export const adminAnalytics = async () => {
     return res.json();
 };
 export const AllUser = async () => {
+    const {token}=await auth.api.getToken({
+        headers:await headers()
+    })
+    // console.log(token)
     const res = await fetch(`${baseUrl}/api/admin/users`, {
         cache: "no-store",
+        authorization:`Bearer ${token}`
     });
 
     if (!res.ok) {
-        throw new Error("Failed to fetch admin analytics");
+        throw new Error("Failed to fetch all user");
     }
 
     return res.json();

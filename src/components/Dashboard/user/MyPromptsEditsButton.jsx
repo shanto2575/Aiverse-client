@@ -1,7 +1,6 @@
 "use client";
-import { Envelope } from "@gravity-ui/icons";
 import { Button, Modal, Surface } from "@heroui/react";
-import { ArrowUpRight, Pencil } from "lucide-react";
+import { ArrowUpRight, Pencil, X } from "lucide-react"; 
 import React, { useState } from "react";
 import { authClient } from '@/lib/auth-client';
 import { EditsPrompt } from "@/lib/api/user/action";
@@ -9,13 +8,12 @@ import { useRouter } from "next/navigation";
 import { showToast } from "@/components/Utility/toast";
 
 const MyPromptsEditsButton = ({ item }) => {
-    // মোডাল ওপেন/ক্লোজ কন্ট্রোল করার জন্য স্টেট
     const [isOpen, setIsOpen] = useState(false);
     const [loading, setLoading] = useState(false);
     const [visibility, setVisibility] = useState(
         item.visibility || "public"
     );
-    
+
     const { data: session } = authClient.useSession();
     const user = session?.user;
     const router = useRouter();
@@ -29,13 +27,13 @@ const MyPromptsEditsButton = ({ item }) => {
 
         try {
             const result = await EditsPrompt(data, item._id);
-            
+
             if (result && result.acknowledged) {
                 showToast.success("Updated successfully");
-                setIsOpen(false); 
+                setIsOpen(false);
                 setTimeout(() => {
-                window.location.reload();
-            }, 1000);
+                    window.location.reload();
+                }, 1000);
             } else {
                 showToast.error("Failed to update prompt");
             }
@@ -62,13 +60,25 @@ const MyPromptsEditsButton = ({ item }) => {
             <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
                 <Modal.Backdrop className="backdrop-blur-md bg-black/20 transition-all duration-300">
                     <Modal.Container placement="auto">
-                        <Modal.Dialog className="sm:max-w-4xl bg-[#ebdcc9] border border-[#dfcbaf] shadow-2xl rounded-2xl">
-                            <Modal.CloseTrigger className="text-[#2c221e]/60 hover:text-[#2c221e]" />
-                            <Modal.Header className="flex flex-col gap-1">
-                                <Modal.Icon className="bg-[#2c221e]/10 text-[#2c221e]">
-                                    <Envelope className="size-5" />
-                                </Modal.Icon>
+                        <Modal.Dialog className="sm:max-w-4xl bg-[#ebdcc9] border border-[#dfcbaf] shadow-2xl rounded-2xl relative">
+
+                            {/* 🛠️ ফিক্সড ক্রস বাটন (Кnockout Close Button) */}
+                            <button
+                                type="button"
+                                onClick={() => setIsOpen(false)}
+                                className="absolute top-4 right-4 p-1.5 rounded-lg bg-[#2c221e]/5 hover:bg-[#2c221e]/10 text-[#2c221e]/60 hover:text-[#2c221e] transition-all duration-200 z-50 cursor-pointer"
+                                aria-label="Close modal"
+                            >
+                                <X size={16} />
+                            </button>
+
+                            <Modal.Header className="flex flex-col gap-1 pt-6 px-6 pb-2">
+                                <div className="flex items-center gap-2 text-[#2c221e]">
+                                    <Pencil size={18} className="text-[#78541c]" />
+                                    <h3 className="text-lg font-black tracking-tight">Edit Prompt Matrix</h3>
+                                </div>
                             </Modal.Header>
+
                             <Modal.Body className="p-6 bg-[#ebdcc9]">
                                 <Surface variant="default" className="bg-transparent shadow-none p-0">
                                     <form onSubmit={onSubmit} className="flex flex-col gap-5">

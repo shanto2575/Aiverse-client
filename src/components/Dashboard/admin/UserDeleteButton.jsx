@@ -1,6 +1,7 @@
 "use client";
 
 import { showToast } from "@/components/Utility/toast";
+import { authClient } from "@/lib/auth-client";
 import { baseUrl } from "@/lib/baseUrl";
 import { AlertDialog, Button } from "@heroui/react";
 import { Trash2 } from "lucide-react";
@@ -9,10 +10,15 @@ import { useRouter } from "next/navigation";
 export function UserDeleteButton({ userId, setUserList }) {
     const router = useRouter()
     const handleDelete = async (id) => {
+        const tokenData = await authClient.token();
+
+        const token = tokenData?.data?.token;
+        // console.log(token)
         const res = await fetch(`${baseUrl}/api/admin/users/${id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
+                authorization: `Bearer ${token}`
             },
         });
 

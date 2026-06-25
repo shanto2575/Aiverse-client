@@ -1,6 +1,7 @@
 "use client";
 
 import { showToast } from "@/components/Utility/toast";
+import { authClient } from "@/lib/auth-client";
 import { baseUrl } from "@/lib/baseUrl";
 import { AlertDialog, Button } from "@heroui/react";
 import { Trash2 } from "lucide-react";
@@ -10,18 +11,26 @@ import toast from "react-hot-toast";
 export function MyPromptsDeleteButton({ item }) {
   const router = useRouter()
   const handleDelete = async (id) => {
+    const tokenData = await authClient.token();
+    // console.log(tokenData,'tokendata')
 
+    const token = tokenData?.data?.token;
+    // console.log(token)
     const res = await fetch(`${baseUrl}/api/prompts/${id}`, {
       method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        authorization: `Bearer ${token}`
       }
     })
     const data = await res.json()
     // console.log(data)
     if (data.deletedCount > 0) {
       showToast.success("Delete successfully");
-      router.refresh();
+      // router.refresh();
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
     }
   }
   return (
