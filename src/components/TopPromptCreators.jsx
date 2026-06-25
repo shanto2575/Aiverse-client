@@ -4,7 +4,7 @@ import { getTopCreators } from "@/lib/action/data";
 
 const TopPromptCreators = async () => {
     const creators = await getTopCreators();
-    console.log(creators)
+    // console.log(creators)
 
     return (
         <section className="py-16 md:py-24 bg-[#ebdcc9]">

@@ -4,6 +4,7 @@ import { userPrompts } from '@/lib/api/user/data'
 import { authClient } from '@/lib/auth-client'
 import { useState, useEffect } from 'react'
 import MyPromptTable from '@/components/Dashboard/user/MyPromptTable'
+import { Terminal } from 'lucide-react'
 
 const MyPromptsPage = () => {
     const [myPrompt, setMyPrompt] = useState([])
@@ -27,6 +28,9 @@ const MyPromptsPage = () => {
 
     return (
         <div>
+            <div>
+                
+            </div>
             <MyPromptTable prompts={myPrompt} />
         </div>
     )

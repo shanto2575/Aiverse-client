@@ -27,7 +27,17 @@ const MyPromptsPage = () => {
 
   return (
     <div>
-      <MyPromptTable prompts={myPrompt} />
+      <div className="p-4 sm:p-6 bg-[#ebdcc9] rounded-t-2xl mb-4">
+        <h2 className="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#2c221e] tracking-tight">
+          My Prompt Templates
+        </h2>
+        <p className="text-xs sm:text-sm text-[#2c221e]/70 mt-1.5 font-medium">
+          Review approval statuses, change details, and check analytics.
+        </p>
+      </div>
+      <div >
+        <MyPromptTable prompts={myPrompt} />
+      </div>
     </div>
   )
 }

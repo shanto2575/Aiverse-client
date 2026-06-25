@@ -9,12 +9,14 @@ export const serverMutation = async (path, method, data) => {
         body: JSON.stringify(data)
     })
 
-    const resData=await res.json()
+    const resData = await res.json()
     // console.log(resData,'resdataa')
     return resData;
 }
 
 export const serverFetch = async (path) => {
-    const res = await fetch(`${baseUrl}${path}`)
+    const res = await fetch(`${baseUrl}${path}`, {
+        cache: "no-store",
+    })
     return res.json()
 }

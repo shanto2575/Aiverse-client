@@ -8,6 +8,7 @@ import { addPrompt } from "@/lib/api/user/action";
 import { authClient } from '@/lib/auth-client';
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import { showToast } from "@/components/Utility/toast";
 
 
 export default function AddProductPage() {
@@ -39,9 +40,9 @@ export default function AddProductPage() {
     // console.log(result,'limit')
     if (result.insertedId) {
       route.push('/dashboard/user/my-prompts')
-      toast.success('Prompts Add Successful')
+      showToast.success('Prompts Add Successful')
     }else{
-      toast.error(result.message ||'Prompts is not created!')
+      showToast.error(result.message ||'Prompts is not created!')
     }
   };
 

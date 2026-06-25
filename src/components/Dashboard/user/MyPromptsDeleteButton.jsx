@@ -1,5 +1,6 @@
 "use client";
 
+import { showToast } from "@/components/Utility/toast";
 import { baseUrl } from "@/lib/baseUrl";
 import { AlertDialog, Button } from "@heroui/react";
 import { Trash2 } from "lucide-react";
@@ -19,16 +20,15 @@ export function MyPromptsDeleteButton({ item }) {
     const data = await res.json()
     // console.log(data)
     if (data.deletedCount > 0) {
-      toast.success("Delete successfully");
+      showToast.success("Delete successfully");
       router.refresh();
-      window.location.reload()
     }
   }
   return (
     <AlertDialog>
       <AlertDialog.Trigger>
         <button
-          className="p-2 bg-rose-500/10 hover:bg-rose-500/20 text-rose-600 rounded-xl border border-rose-500/20 transition-all duration-200 active:scale-95 cursor-pointer"
+          className="p-2 bg-rose-500/10 hover:bg-rose-500/20 text-red-600 rounded-xl border border-rose-500/20 transition-all duration-200 active:scale-95 cursor-pointer"
           title="Delete"
         >
           <Trash2 size={13} />
