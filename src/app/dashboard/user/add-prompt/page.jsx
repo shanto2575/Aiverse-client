@@ -34,7 +34,8 @@ export default function AddProductPage() {
       userEmail: session?.user?.email,
       status: 'pending',
       copies: 0,
-      rating: 0
+      rating: 0,
+      bookmarkCount:0,
     };
     const result = await addPrompt(products)
     // console.log(result,'limit')

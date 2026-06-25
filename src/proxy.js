@@ -18,5 +18,5 @@ export async function proxy(request) {
   }
 }
 export const config = {
-  matcher: ["/all-prompts/:path*"],
+  matcher: ["/all-prompts/:id"],
 };

@@ -4,7 +4,7 @@ Aiverse is an AI Prompt Sharing Platform where users can create, share, bookmark
 
 ##  Live URL
 
-https://your-live-link.com
+https://aiverse-client-rose.vercel.app
 
 ---
 

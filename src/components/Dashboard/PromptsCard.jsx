@@ -5,7 +5,7 @@ import React from 'react'
 
 const PromptsCard = ({ cardData }) => {
     return (
-        <div className="w-full bg-white/60 backdrop-blur-md rounded-[24px] border border-[#dfcbaf] p-4 flex flex-col justify-between h-full shadow-[0_4px_20px_rgba(44,34,30,0.02)] hover:shadow-[0_10px_30px_rgba(44,34,30,0.08)] transition-all duration-300 group ">
+        <div className="w-full bg-white/20 backdrop-blur-md rounded-[24px] border border-[#dfcbaf] p-4 flex flex-col justify-between h-full shadow-[0_4px_20px_rgba(44,34,30,0.02)] hover:shadow-[0_10px_30px_rgba(44,34,30,0.08)] transition-all duration-300 group ">
 
             <div className="flex flex-col flex-grow">
 

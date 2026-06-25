@@ -51,10 +51,8 @@ const PromptsDetailsPage = async ({ params }) => {
             <BackButton />
             <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
 
-                {/* Left Side */}
                 <div className="lg:col-span-2 bg-white/50 backdrop-blur-md rounded-3xl p-6 sm:p-8 border border-[#dfcbaf] space-y-8 shadow-[0_8px_30px_rgba(44,34,30,0.02)]">
 
-                    {/* Title & Actions */}
                     <div className="space-y-4">
                         <div className="flex items-start justify-between gap-4">
                             <h1 className="text-2xl sm:text-4xl font-black tracking-tight leading-tight">

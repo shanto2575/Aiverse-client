@@ -9,7 +9,7 @@ import {
     Heart,
     NodesRight,
 } from "@gravity-ui/icons";
-import { FaTwitter } from "react-icons/fa";
+import { FaFacebook, FaTwitter } from "react-icons/fa";
 
 export default function Footer() {
     const currentYear = new Date().getFullYear();
@@ -56,7 +56,7 @@ export default function Footer() {
                             <Link href="/all-prompts" className="hover:text-[#78541c] transition-colors duration-200">
                                 All Prompts
                             </Link>
-                            <Link href="/trending" className="hover:text-[#78541c] transition-colors duration-200">
+                            <Link href="/all-prompts" className="hover:text-[#78541c] transition-colors duration-200">
                                 Trending Prompts
                             </Link>
                             <Link href="/signin" className="hover:text-[#78541c] transition-colors duration-200">
@@ -107,31 +107,35 @@ export default function Footer() {
 
                         <div className="flex items-center gap-2.5 mb-6">
                             <a
-                                href="#"
+                                href="https://x.com/home"
+                                target="_blank"
                                 className="w-10 h-10 rounded-xl border border-[#dfcbaf] bg-[#f5ebd7]/40 flex items-center justify-center text-[#2c221e]/70 hover:text-[#78541c] hover:border-[#78541c]/30 hover:bg-[#f5ebd7]/80 transition-all duration-300 shadow-sm"
                             >
                                 <FaTwitter size={16} />
                             </a>
 
                             <a
-                                href="#"
+                                href="https://github.com/shanto2575"
+                                target="_blank"
                                 className="w-10 h-10 rounded-xl border border-[#dfcbaf] bg-[#f5ebd7]/40 flex items-center justify-center text-[#2c221e]/70 hover:text-[#78541c] hover:border-[#78541c]/30 hover:bg-[#f5ebd7]/80 transition-all duration-300 shadow-sm"
                             >
                                 <LogoGithub size={16} />
                             </a>
 
                             <a
-                                href="#"
+                                href="https://www.linkedin.com/in/shantosharma/"
+                                target="_blank"
                                 className="w-10 h-10 rounded-xl border border-[#dfcbaf] bg-[#f5ebd7]/40 flex items-center justify-center text-[#2c221e]/70 hover:text-[#78541c] hover:border-[#78541c]/30 hover:bg-[#f5ebd7]/80 transition-all duration-300 shadow-sm"
                             >
                                 <LogoLinkedin size={16} />
                             </a>
 
                             <a
-                                href="#"
+                                href="https://www.facebook.com/shanto.sharma.2575"
+                                target="_blank"
                                 className="w-10 h-10 rounded-xl border border-[#dfcbaf] bg-[#f5ebd7]/40 flex items-center justify-center text-[#2c221e]/70 hover:text-[#78541c] hover:border-[#78541c]/30 hover:bg-[#f5ebd7]/80 transition-all duration-300 shadow-sm"
                             >
-                                <Globe size={16} />
+                                <FaFacebook size={16} />
                             </a>
                         </div>
 

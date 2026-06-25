@@ -43,7 +43,7 @@ export default function FilterPanel() {
     };
 
     return (
-        <Card className="relative overflow-hidden bg-white/40 border border-[#dfcbaf] backdrop-blur-md  sm:p-8 shadow-[0_8px_30px_rgba(44,34,30,0.03)] rounded-3xl">
+        <Card className="relative overflow-hidden bg-white/20 border border-[#dfcbaf] backdrop-blur-md  sm:p-8 shadow-[0_8px_30px_rgba(44,34,30,0.03)] rounded-3xl">
 
             {/* Decorative BG */}
             <div className="absolute top-0 right-0 w-64 h-52 bg-gradient-to-br from-[#dfcbaf]/20 via-[#ebdcc9]/10 to-transparent blur-3xl pointer-events-none -z-10" />

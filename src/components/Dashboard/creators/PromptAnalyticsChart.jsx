@@ -48,7 +48,7 @@ const PromptAnalyticsChart = ({ prompts = [] }) => {
                         <Legend wrapperStyle={{ fontWeight: 'bold', fontSize: '12px' }} />
 
                         <Bar dataKey="bookmarks" fill="#4a3b35" radius={[6, 6, 0, 0]} />
-                        <Bar dataKey="copies" fill="#2c221e" radius={[6, 6, 0, 0]} />
+                        <Bar dataKey="copies" fill="#ff7a00" radius={[6, 6, 0, 0]} />
                     </BarChart>
                 </ResponsiveContainer>
             </div>

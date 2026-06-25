@@ -24,7 +24,7 @@ const GrowthMetricsChart = ({ totalPrompts = 0, totalCopies = 0 }) => {
     return (
         <div className="w-full rounded-2xl border-2 border-[#dfcbaf] bg-white/20 p-6 shadow-md mt-8">
             <div className="flex items-center gap-2 mb-6">
-                <TrendingUp size={18} className="text-[#cd4611]" />
+                <TrendingUp size={18} className="text-[#3e97ce]" />
                 <h2 className="text-xl font-black text-[#2c221e]">
                     Accumulative Growth Metrics
                 </h2>
