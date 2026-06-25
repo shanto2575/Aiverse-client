@@ -4,6 +4,7 @@ import PromptEngineeringSection from "@/components/PromptEngineeringSection";
 import TestimonialsSection from "@/components/TestimonialsSection";
 import TopPromptCreators from "@/components/TopPromptCreators";
 import WhyChooseAiverse from "@/components/WhyChooseAiverse";
+export const dynamic = 'force-dynamic';
 
 export default function Home() {
   return (

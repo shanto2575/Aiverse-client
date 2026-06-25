@@ -4,7 +4,6 @@ import { CheckCircle2, Sparkles, ArrowRight, ShieldCheck, Crown } from "lucide-r
 import Link from 'next/link';
 import { subscription } from '@/lib/subscription';
 
-// ১. এই লাইনটি অত্যন্ত জরুরি যেন Next.js এই সাকসেস পেজটি ক্যাশ করে না রাখে
 export const dynamic = 'force-dynamic';
 
 export default async function PremiumSuccess({ searchParams }) {
@@ -15,19 +14,16 @@ export default async function PremiumSuccess({ searchParams }) {
         throw new Error('Please provide a valid session_id (`cs_test_...`)')
     }
 
-    // Stripe সেশন রিট্রিভ করা হচ্ছে
     const session = await stripe.checkout.sessions.retrieve(session_id, {
         expand: ['line_items', 'payment_intent']
     })
     
     const metadata = session?.metadata;
 
-    // ২. ডেটাবেজে সাবস্ক্রিপশন আপডেট শেষ হওয়া পর্যন্ত অবশ্যই await করতে হবে
     if (metadata) {
         await subscription({ ...metadata, sessionId: session_id })
     }
 
-    // স্ট্রাইপ থেকে ডাইনামিক প্রাইস বের করা (যদি সেন্টে থাকে তাহলে ১০০ দিয়ে ভাগ)
     const amountPaid = session?.amount_total ? (session.amount_total / 100).toFixed(2) : "5.00";
     const currency = session?.currency ? session.currency.toUpperCase() : "USD";
 

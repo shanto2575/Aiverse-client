@@ -28,7 +28,7 @@ export async function POST() {
                 userEmail:user?.email,
             },
             mode: 'subscription',
-            success_url: `${process.env.NEXT_PUBLIC_APP_URL}/dashboard/user/premium-success?session_id={CHECKOUT_SESSION_ID}`,
+            success_url: `${origin}/dashboard/user/premium-success?session_id={CHECKOUT_SESSION_ID}`,
             automatic_tax: { enabled: true },
         });
         // console.log(session,'sss')
