@@ -12,19 +12,34 @@ import {
   Surface,
   TextField,
 } from "@heroui/react";
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { motion } from "motion/react";
-import { Sparkles, KeyRound, Eye, Globe } from "lucide-react";
+import { Sparkles, KeyRound, Eye } from "lucide-react";
+import Link from "next/link";
+import { FaUserPlus } from "react-icons/fa";
+import { FcGoogle } from "react-icons/fc";
 
 export default function SignInPage() {
+  const searchParams = useSearchParams();
+
+  const emailParam = searchParams.get("email") || "";
+  const passwordParam = searchParams.get("password") || "";
+
+  const [email, setEmail] = useState(emailParam);
+  const [password, setPassword] = useState(passwordParam);
+
+  useEffect(() => {
+    if (emailParam) setEmail(emailParam);
+    if (passwordParam) setPassword(passwordParam);
+  }, [emailParam, passwordParam]);
+
   const onSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const user = Object.fromEntries(formData.entries());
-    // console.log(user,'data')
 
     await authClient.signIn.email({
-      ...user,
+      email,
+      password,
       callbackURL: "/",
     });
   };
@@ -38,8 +53,8 @@ export default function SignInPage() {
 
   return (
     <div className="w-full min-h-[80vh] grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-6xl mx-auto px-4 py-6">
-      
-      <motion.div 
+
+      <motion.div
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
@@ -81,7 +96,7 @@ export default function SignInPage() {
         </div>
       </motion.div>
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
@@ -103,8 +118,10 @@ export default function SignInPage() {
                 <Fieldset.Group className="space-y-4">
                   <TextField isRequired name="email" type="email" className="w-full">
                     <Label className="text-xs font-bold uppercase tracking-wider text-[#2c221e]/80 mb-1.5">Email</Label>
-                    <Input 
-                      placeholder="john@example.com" 
+                    <Input
+                      placeholder="john@example.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
                       className="w-full bg-transparent border border-[#dfcbaf] text-[#2c221e] placeholder-[#2c221e]/40 rounded-xl px-4 py-2.5 focus:border-[#2c221e] focus:ring-1 focus:ring-[#2c221e] outline-none text-sm transition-all"
                     />
                     <FieldError className="text-xs text-red-600 mt-1" />
@@ -112,16 +129,18 @@ export default function SignInPage() {
 
                   <TextField isRequired name="password" type="password">
                     <Label className="text-xs font-bold uppercase tracking-wider text-[#2c221e]/80 mb-1.5">Password</Label>
-                    <Input 
-                      placeholder="••••••••" 
+                    <Input
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
                       className="w-full bg-transparent border border-[#dfcbaf] text-[#2c221e] placeholder-[#2c221e]/40 rounded-xl px-4 py-2.5 focus:border-[#2c221e] focus:ring-1 focus:ring-[#2c221e] outline-none text-sm transition-all"
                     />
                     <FieldError className="text-xs text-red-600 mt-1" />
                   </TextField>
                 </Fieldset.Group>
 
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   className="w-full bg-[#2c221e] text-[#ebdcc9] hover:bg-[#4a3b35] font-bold py-3 px-4 rounded-xl shadow-md transform active:scale-[0.98] transition-all text-sm mt-2"
                 >
                   Sign In
@@ -138,13 +157,23 @@ export default function SignInPage() {
               </span>
             </div>
 
-            <Button 
+            <Button
               onClick={handleGoogleLogin}
               className="w-full bg-transparent border border-[#2c221e]/20 text-[#2c221e] hover:bg-[#2c221e]/5 font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-sm"
             >
-              <Globe className="w-4 h-4" />
+              <FcGoogle />
               <span>Google Account</span>
             </Button>
+            <p className="text-center text-sm text-[#2c221e]/70 mt-4">
+              Don`t have an account?{" "}
+              <Link
+                href="/signup"
+                className="font-bold flex items-center gap-2 justify-center text-md text-[#2135ce] underline hover:text-[#4a3b35] transition-colors"
+              >
+                <FaUserPlus />
+                Register Here
+              </Link>
+            </p>
           </Surface>
         </div>
       </motion.div>

@@ -1,28 +1,22 @@
-
-
 import React from "react";
 import { Mail, ShieldCheck, FileText, CheckCircle2, Diamond, Sparkles, Crown } from "lucide-react";
 import { getUser } from "@/lib/session";
 import { baseUrl } from "@/lib/baseUrl";
 import Image from "next/image";
 
+export const dynamic = 'force-dynamic';
 
 export default async function UserProfilePage() {
-    // const { data: session } = authClient.useSession();
-    const user = await getUser()
-    // console.log(user)
+    const user = await getUser();
     const role = user?.role || "user";
-    // console.log(user)
 
-    const plan = user?.plan;
-    // console.log(plan)
     const res = await fetch(
         `${baseUrl}/api/user/${user?.email}`,
         { cache: "no-store" }
     );
     const data = await res.json();
 
-    // console.log(data);
+    const livePlan = data?.plan || data?.user?.plan || user?.plan || "free";
 
     return (
         <div className="w-full max-w-7xl mx-auto px-4 py-8 text-[#2c221e]">
@@ -42,7 +36,7 @@ export default async function UserProfilePage() {
                         {user?.image ? (
                             <Image
                                 src={user.image}
-                                alt={user?.name}
+                                alt={user?.name || "Avatar"}
                                 width={300}
                                 height={300}
                                 className="w-full h-full object-cover" />
@@ -66,11 +60,13 @@ export default async function UserProfilePage() {
                             <span className="text-[10px] font-bold uppercase tracking-widest bg-[#2c221e] text-[#ebdcc9] px-2.5 py-1 rounded-md shadow-sm">
                                 Role: {role}
                             </span>
-                            <span className={`text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm transition-all ${plan
+                            
+                            <span className={`text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded-md shadow-sm transition-all ${
+                                livePlan === "pro"
                                 ? "bg-gradient-to-r from-amber-500 to-yellow-600 text-white shadow-[0_0_10px_rgba(245,158,11,0.3)] animate-pulse"
                                 : "border border-[#dfcbaf] bg-[#ebdcc9]/50 text-[#2c221e]"
                                 }`}>
-                                Plan: {user?.plan}
+                                Plan: {livePlan}
                             </span>
                         </div>
                     </div>
@@ -83,7 +79,7 @@ export default async function UserProfilePage() {
                             <FileText className="w-4 h-4" />
                             <span>Prompts Published</span>
                         </div>
-                        <p className="text-4xl font-black text-[#2c221e]">{data?.promptCount||0}</p>
+                        <p className="text-4xl font-black text-[#2c221e]">{data?.promptCount || 0}</p>
                     </div>
 
                     <div className="bg-[#ebdcc9]/40 border border-[#dfcbaf]/60 rounded-2xl p-5 space-y-3 shadow-sm">
@@ -98,7 +94,7 @@ export default async function UserProfilePage() {
                     </div>
                 </div>
 
-                {plan !== "pro" ? (
+                {livePlan !== "pro" ? (
                     /* Free Tier Card */
                     <div className="border border-[#dfcbaf] bg-gradient-to-r from-[#2c221e] to-[#4a3b35] text-[#ebdcc9] rounded-2xl p-6 flex flex-col md:flex-row items-center justify-between gap-6 shadow-md relative overflow-hidden group">
                         <div className="absolute inset-0 bg-white/[0.02] pointer-events-none group-hover:scale-105 transition-transform duration-500"></div>
@@ -112,22 +108,18 @@ export default async function UserProfilePage() {
                                 Unlock access to all private prompt templates, parameter sets, and community reviews for a single one-time contribution of $5.
                             </p>
                         </div>
-                        {/* <UpdateToPremiumButton /> */}
                         <form action={'/api/checkout_sessions'} method='POST'>
                             <button
                                 type="submit"
-                                // onClick={updateToPrimium}
                                 className="w-full md:w-auto bg-[#ebdcc9] text-[#2c221e] hover:bg-white font-black px-6 py-3 rounded-xl text-sm transition-all shadow-md transform active:scale-[0.98] shrink-0 relative z-10 tracking-wide cursor-pointer">
                                 Upgrade Now ($5)
                             </button>
                         </form>
-
                     </div>
                 ) : (
+                    /* PRO Card */
                     <div className="relative overflow-hidden rounded-2xl p-0.5 bg-gradient-to-r from-amber-400 via-purple-500 to-yellow-500 shadow-[0_10px_30px_rgba(139,92,246,0.15)] group">
-
                         <div className="bg-gradient-to-br from-[#1e1512] via-[#241324] to-[#140b24] text-white rounded-[14px] p-6 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden">
-
                             <div className="absolute top-0 right-0 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl pointer-events-none group-hover:bg-purple-500/20 transition-all duration-700" />
                             <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-amber-500/5 rounded-full blur-2xl pointer-events-none" />
 
@@ -149,11 +141,9 @@ export default async function UserProfilePage() {
                                 <Sparkles className="w-4 h-4 fill-current animate-spin-slow" />
                                 <span>PRO ACTIVE</span>
                             </div>
-
                         </div>
                     </div>
                 )}
-
             </div>
         </div>
     );

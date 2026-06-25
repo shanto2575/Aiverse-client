@@ -15,7 +15,6 @@ export default function Footer() {
     const currentYear = new Date().getFullYear();
     const pathname = usePathname();
 
-    // Dashboard পেজগুলোতে ফুটার হাইড রাখার লজিক
     if (pathname.includes('dashboard')) {
         return null;
     }

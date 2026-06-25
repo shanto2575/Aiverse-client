@@ -1,27 +1,35 @@
-
 import { stripe } from '@/lib/stripe'
 import { redirect } from 'next/navigation'
 import { CheckCircle2, Sparkles, ArrowRight, ShieldCheck, Crown } from "lucide-react";
 import Link from 'next/link';
-import { subscription } from '@/lib/api/user/action';
+import { subscription } from '@/lib/subscription';
 
+// ১. এই লাইনটি অত্যন্ত জরুরি যেন Next.js এই সাকসেস পেজটি ক্যাশ করে না রাখে
+export const dynamic = 'force-dynamic';
 
 export default async function PremiumSuccess({ searchParams }) {
     const { session_id } = await searchParams
-    // console.log(session_id)
+    console.log(session_id, 'sessionid')
 
-    if (!session_id)
+    if (!session_id) {
         throw new Error('Please provide a valid session_id (`cs_test_...`)')
+    }
 
+    // Stripe সেশন রিট্রিভ করা হচ্ছে
     const session = await stripe.checkout.sessions.retrieve(session_id, {
         expand: ['line_items', 'payment_intent']
     })
-    // console.log(session.metadata)
+    
     const metadata = session?.metadata;
-    // console.log(metadata,'meta')
 
-    await subscription({ ...metadata, sessionId: session_id })
+    // ২. ডেটাবেজে সাবস্ক্রিপশন আপডেট শেষ হওয়া পর্যন্ত অবশ্যই await করতে হবে
+    if (metadata) {
+        await subscription({ ...metadata, sessionId: session_id })
+    }
 
+    // স্ট্রাইপ থেকে ডাইনামিক প্রাইস বের করা (যদি সেন্টে থাকে তাহলে ১০০ দিয়ে ভাগ)
+    const amountPaid = session?.amount_total ? (session.amount_total / 100).toFixed(2) : "5.00";
+    const currency = session?.currency ? session.currency.toUpperCase() : "USD";
 
     return (
         <div className="w-full min-h-[80vh] flex items-center justify-center px-4 py-12">
@@ -49,8 +57,8 @@ export default async function PremiumSuccess({ searchParams }) {
                             Payment Successful
                         </h1>
                         <h2 className="text-xl font-extrabold tracking-tight text-[#2c221e]/90">
-                            <span className='text-sm text-purple-400'>
-                                {session?.customer_email}
+                            <span className='text-sm text-amber-800 font-bold'>
+                                {session?.customer_details?.email || session?.customer_email}
                             </span> <br />
                             Welcome to the Club!
                         </h2>
@@ -69,7 +77,7 @@ export default async function PremiumSuccess({ searchParams }) {
 
                         <div className="flex items-center justify-between text-xs border-b border-[#2c221e]/10 pb-3">
                             <span className="text-[#2c221e]/60 font-bold uppercase tracking-wider text-[10px]">Amount Paid</span>
-                            <span className="text-emerald-700 font-black text-sm">$5.00 USD</span>
+                            <span className="text-emerald-700 font-black text-sm">${amountPaid} {currency}</span>
                         </div>
 
                         <div className="flex items-center justify-between text-xs pt-0.5">

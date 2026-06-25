@@ -3,7 +3,8 @@
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "motion/react";
-import { Search, Sparkles, Terminal } from "lucide-react";
+import { Search, Sparkles, Terminal, TerminalIcon } from "lucide-react";
+import { HiTrendingUp } from "react-icons/hi";
 
 export default function Banner() {
     const router = useRouter();
@@ -92,13 +93,13 @@ export default function Banner() {
                 className="flex flex-wrap items-center justify-center gap-2 max-w-3xl mb-10"
             >
                 <span className="text-xs font-bold uppercase tracking-wider text-[#2c221e]/60 flex items-center gap-1 mr-1">
-                    <Terminal className="w-3.5 h-3.5" /> Trending:
+                    <HiTrendingUp  className="w-3.5 h-3.5" /> Trending:
                 </span>
                 {trendingTags.map((tag, idx) => (
                     <button
                         key={idx}
                         onClick={() => handleTagClick(tag)}
-                        className="bg-transparent hover:bg-[#2c221e] text-[#2c221e] hover:text-[#ebdcc9] border border-[#dfcbaf] hover:border-[#2c221e] px-3 py-1 rounded-full text-xs font-semibold transition-all duration-200"
+                        className=" bg-transparent hover:bg-[#2c221e] text-[#2c221e] hover:text-[#ebdcc9] border border-[#dfcbaf] hover:border-[#2c221e] px-3 py-1 rounded-full text-xs font-semibold transition-all duration-200"
                     >
                         {tag}
                     </button>
@@ -117,12 +118,12 @@ export default function Banner() {
                 >
                     Explore Marketplace
                 </button>
-                <button
+                {/* <button
                     onClick={() => router.push("/dashboard")}
                     className="w-full sm:w-auto bg-transparent text-[#2c221e] hover:bg-[#2c221e]/5 border border-[#2c221e]/30 font-bold px-8 py-3.5 rounded-xl transform active:scale-[0.98] transition-all text-sm tracking-wide"
                 >
                     Submit a Prompt
-                </button>
+                </button> */}
             </motion.div>
 
         </div>

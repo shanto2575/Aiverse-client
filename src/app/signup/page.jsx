@@ -16,6 +16,9 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { motion } from "motion/react";
 import { Sparkles, Terminal, ShieldCheck, Zap } from "lucide-react";
+import { FcGoogle } from "react-icons/fc";
+import Link from "next/link";
+import { FaSignInAlt } from "react-icons/fa";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -24,7 +27,6 @@ export default function SignUpPage() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const user = Object.fromEntries(formData.entries());
-    // console.log(user)
 
     await authClient.signUp.email({
       ...user,
@@ -34,10 +36,22 @@ export default function SignUpPage() {
     router.push("/");
   };
 
+  // Google Sign In Handle korar jonno function
+  const handleGoogleLogin = async () => {
+    try {
+      await authClient.signIn.social({
+        provider: "google",
+        callbackURL: "/", 
+      });
+    } catch (error) {
+      console.error("Google sign in failed:", error);
+    }
+  };
+
   return (
     <div className="w-full min-h-[80vh] grid grid-cols-1 lg:grid-cols-12 gap-8 items-center max-w-6xl mx-auto px-4 py-6">
-      
-      <motion.div 
+
+      <motion.div
         initial={{ opacity: 0, x: -50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
@@ -89,7 +103,7 @@ export default function SignUpPage() {
         </div>
       </motion.div>
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
@@ -111,8 +125,8 @@ export default function SignUpPage() {
                 <Fieldset.Group className="space-y-4">
                   <TextField isRequired name="name" className="w-full">
                     <Label className="text-xs font-bold uppercase tracking-wider text-[#2c221e]/80 mb-1.5">Name</Label>
-                    <Input 
-                      placeholder="John Doe" 
+                    <Input
+                      placeholder="John Doe"
                       className="w-full bg-transparent border border-[#dfcbaf] text-[#2c221e] placeholder-[#2c221e]/40 rounded-xl px-4 py-2.5 focus:border-[#2c221e] focus:ring-1 focus:ring-[#2c221e] outline-none text-sm transition-all"
                     />
                     <FieldError className="text-xs text-red-600 mt-1" />
@@ -120,8 +134,8 @@ export default function SignUpPage() {
 
                   <TextField name="image" type="url" className="w-full">
                     <Label className="text-xs font-bold uppercase tracking-wider text-[#2c221e]/80 mb-1.5">Image URL</Label>
-                    <Input 
-                      placeholder="https://example.com/avatar.jpg" 
+                    <Input
+                      placeholder="https://example.com/avatar.jpg"
                       className="w-full bg-transparent border border-[#dfcbaf] text-[#2c221e] placeholder-[#2c221e]/40 rounded-xl px-4 py-2.5 focus:border-[#2c221e] focus:ring-1 focus:ring-[#2c221e] outline-none text-sm transition-all"
                     />
                     <FieldError className="text-xs text-red-600 mt-1" />
@@ -129,8 +143,8 @@ export default function SignUpPage() {
 
                   <TextField isRequired name="email" type="email" className="w-full">
                     <Label className="text-xs font-bold uppercase tracking-wider text-[#2c221e]/80 mb-1.5">Email</Label>
-                    <Input 
-                      placeholder="john@example.com" 
+                    <Input
+                      placeholder="john@example.com"
                       className="w-full bg-transparent border border-[#dfcbaf] text-[#2c221e] placeholder-[#2c221e]/40 rounded-xl px-4 py-2.5 focus:border-[#2c221e] focus:ring-1 focus:ring-[#2c221e] outline-none text-sm transition-all"
                     />
                     <FieldError className="text-xs text-red-600 mt-1" />
@@ -138,20 +152,48 @@ export default function SignUpPage() {
 
                   <TextField isRequired name="password" type="password">
                     <Label className="text-xs font-bold uppercase tracking-wider text-[#2c221e]/80 mb-1.5">Password</Label>
-                    <Input 
-                      placeholder="••••••••" 
+                    <Input
+                      placeholder="••••••••"
                       className="w-full bg-transparent border border-[#dfcbaf] text-[#2c221e] placeholder-[#2c221e]/40 rounded-xl px-4 py-2.5 focus:border-[#2c221e] focus:ring-1 focus:ring-[#2c221e] outline-none text-sm transition-all"
                     />
                     <FieldError className="text-xs text-red-600 mt-1" />
                   </TextField>
                 </Fieldset.Group>
 
-                <Button 
-                  type="submit" 
+                <Button
+                  type="submit"
                   className="w-full bg-[#2c221e] text-[#ebdcc9] hover:bg-[#4a3b35] font-bold py-3 px-4 rounded-xl shadow-md transform active:scale-[0.98] transition-all text-sm mt-4"
                 >
                   Sign Up
                 </Button>
+
+                {/* --- Text Divider --- */}
+                <div className="relative flex items-center">
+                  <div className="flex-grow border-t border-[#dfcbaf]/60"></div>
+                  <span className="flex-shrink mx-4 text-xs font-medium text-[#2c221e]/60 uppercase tracking-wider">
+                    Or continue with
+                  </span>
+                  <div className="flex-grow border-t border-[#dfcbaf]/60"></div>
+                </div>
+
+                {/* --- Google Sign In Button --- */}
+                <Button
+              onClick={handleGoogleLogin}
+              className="w-full bg-transparent border border-[#2c221e]/20 text-[#2c221e] hover:bg-[#2c221e]/5 font-bold py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-all text-sm"
+            >
+              <FcGoogle/>
+              <span>Google Account</span>
+            </Button>
+            <p className="text-center text-sm text-[#2c221e]/70">
+                  Already have an account?{" "}
+                  <Link 
+                    href="/signin" 
+                    className="font-bold text-sm text-[#1f3ad4] underline hover:text-[#4a3b35] transition-colors"
+                  >
+                    Sign In
+                  </Link>
+                </p>
+
               </Fieldset>
             </Form>
           </Surface>
