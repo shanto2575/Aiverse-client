@@ -3,10 +3,14 @@
 import { handleApprove, handleDelete, handleReject } from "@/lib/admin/action";
 import { Eye, CheckCircle2, XCircle, Trash2 } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const PromptModerationTable = ({ prompts = [] }) => {
     const [promptList, setPromptList] = useState(prompts);
+
+    useEffect(() => {
+        setPromptList(prompts);
+    }, [prompts]);
 
     return (
         <div className="w-full rounded-2xl border border-[#dfcbaf] bg-[#f5ebd7]/60 shadow-md backdrop-blur-sm overflow-hidden">

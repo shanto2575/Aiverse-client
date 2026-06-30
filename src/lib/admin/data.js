@@ -31,14 +31,16 @@ export const AllUser = async () => {
 };
 
 
-export const adminPrompts = async () => {
-    const res = await fetch(`${baseUrl}/api/admin/prompts`, {
-        cache: "no-store",
-    });
+export const adminPrompts = async (page = 1, limit = 5) => {
+    const res = await fetch(
+        `${baseUrl}/api/admin/prompts?page=${page}&limit=${limit}`,
+        {
+            cache: "no-store",
+        }
+    );
 
     return res.json();
 };
-
 
 export const getAdminPayments = async () => {
     const res = await fetch(`${baseUrl}/api/admin/payments`, {
